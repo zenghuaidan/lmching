@@ -170,17 +170,55 @@
 		
 		<!-- facebook login -->
 		<!-- OAuth2 Client -->
-		<dependency>
+	<!-- 	<dependency>
 		    <groupId>org.springframework.security</groupId>
 		    <artifactId>spring-security-oauth2-client</artifactId>
-		</dependency>
+		</dependency> -->
 		
 		<!-- JWT library -->
-		<dependency>
+<!-- 		<dependency>
 		  	<groupId>io.jsonwebtoken</groupId>
 		  	<artifactId>jjwt</artifactId>
 		  	<version>0.5.1</version>
+		</dependency> -->
+		
+<!--         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-oauth2-client</artifactId>
+        </dependency> -->
+		<dependency>
+		  	<groupId>org.springframework.social</groupId>
+		  	<artifactId>spring-social-facebook</artifactId>
+		  	<version>2.0.3.RELEASE</version>
 		</dependency>
+		
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-oauth2</artifactId>
+			<version>1.1.4.RELEASE</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.springframework.social</groupId>
+			<artifactId>spring-social-config</artifactId>
+			<version>1.1.4.RELEASE</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.social</groupId>
+			<artifactId>spring-social-core</artifactId>
+			<version>1.1.4.RELEASE</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.social</groupId>
+			<artifactId>spring-social-security</artifactId>
+			<version>1.1.4.RELEASE</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.social</groupId>
+			<artifactId>spring-social-web</artifactId>
+			<version>1.1.4.RELEASE</version>
+		</dependency>
+		
 	</dependencies>
 
 	<build>
