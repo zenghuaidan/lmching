@@ -1,0 +1,150 @@
+	
+    /* Base
+    ================================================== */
+	#body	 { 	font-family:'Roboto', "Lucida Grande", Arial, Helvetica, sans-serif; color:#fff;
+				-webkit-font-smoothing:antialiased; -webkit-text-size-adjust:none;
+				font-size:14px; line-height:1.4; font-weight:500;
+				margin:0; padding:0; /* background:#000 url("images/bg.gif"); background-size:100% */ background-color:#000}
+
+	.clearfix:before, .clearfix:after { content: ''; display: table; }
+	.clearfix:after 	{ clear:both; }	
+
+    html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,
+    abbr,acronym,address,big,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,
+    strike,strong,tt,var,b,u,i,center,ol,ul,li,fieldset,form,label,
+    legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,
+    embed,figure,figcaption,footer,header,hgroup,menu,nav,output,ruby,section,
+    summary,time,mark,audio,video {
+        margin:0; padding:0; border:0; vertical-align:baseline;}
+
+
+    article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section { display: block;}
+
+	div,header,section,img,nav,ul,li,a 	{ position:relative;}
+	img  { border:none; outline:none;}
+	a 	 { text-decoration:none; cursor:pointer;}
+
+   /* h2              { font-size:40px; font-weight:200; color:#fd7f2b; margin-bottom:30px}
+    h3, .font-m     { font-size:25px; font-weight:400}
+    h4              { font-size:100%; font-weight:500; margin-top:20px  }
+    .font-normal    { font-size:16px; font-weight:500}*/
+
+    h2              { font-size:30px; font-weight:200; color:#fd7f2b; margin-bottom:30px}
+    h3, .font-m     { font-size:18px; font-weight:400}
+    h4              { font-size:100%; font-weight:500; margin-top:20px  }
+    .font-normal    { font-size:14px; font-weight:500}
+    
+
+    
+    .txt-r      { text-align:right;}
+    .txt-l      { text-align:left;}
+    .float-l    { float:left;}
+    .float-r    { float:right;}
+    .error      { font-size:85%; color:red; font-style:italic; font-weight:500; text-transform:uppercase; line-height:normal;
+                  top:-10px; display:none }
+    .txt-666    { color:#666}
+    .txt-bold   { font-weight:500}
+    .width100   { width:100%}
+
+	/* page edge
+    ================================================== */
+    .admin-inside .full-pg  { max-width:100%; }
+    .full-pg  		{ max-width:1200px; margin:0 auto; padding-left:100px; padding-right:100px; box-sizing: border-box; transition: all 0.3s ease-out}
+    .pg-edge-tb		{ padding-top:50px; padding-bottom:50px}
+
+
+	/* heeader
+    ================================================== */
+    header 				{ background-color:#000; padding:20px 0; transition: all 0.3s ease-out;
+                          background-image: url(images/img-header.jpg); background-position:right top; background-repeat:no-repeat;}
+    header .h-col1 		{ width:205px; float:left;}
+    header .h-col2 		{ width:calc(100% - 205px);  float:right; text-align:left;}
+    header .h-col2 ul 			{ margin:35px 0 0 0; padding:0; font-size:18px}
+    header .h-col2 ul li		{ margin:0; padding:0 10px 0 0; list-style:none; display:inline-block; font-weight:500}
+    header .h-col2 ul li:before { content:"|"; padding-right:15px}
+    header .h-col2 ul li:first-child:before { content:""; padding-right:0}
+
+    header .h-col2 ul li a 		    { color:#fff; transition: all 0.3s ease-out}
+    header .h-col2 ul li a:hover 	{ color:#fd7f2b}
+
+    header .h-col1 img 	{ width:100%; height:auto;}
+    header .h-col2 .h-col2-pos { padding-left:30px}
+    header .h-col2 .deadline { font-size:20px; font-weight:300}
+	/* Action btn (large orange btn)
+    ================================================== */
+    a.ac-btn 		{ font-size:30px; font-weight:300; color:#fd7f2b; transition: all 0.3s ease-out}
+    a.ac-btn:hover  { color:#fff}
+
+    a.ac-btn-admin        { font-size:30px; font-weight:300; color:#fd7f2b; transition: all 0.3s ease-out}
+    a.ac-btn-admin:hover  { color:#666}
+
+    .admin .ac-pos         { margin-top:10px}
+    /* Action btn (gray text orange arrow)
+    ================================================== */
+    a.ac-btn-graytxt        { font-size:25px; font-weight:500; color:#fff; transition: all 0.3s ease-out}
+    a.ac-btn-graytxt:hover  { color:#fd7f2b}
+    a.ac-btn-graytxt i      { color:#fd7f2b}
+
+
+    /* Action btn (small gray btn)
+    ================================================== */
+    a.button .g-btn {   padding:10px 20px; display:block; float:left; position:relative; z-index:2;
+                        background-color:#333; color:#fff; transition: all 0.3s ease-out;
+                        -webkit-border-radius: 20px;
+                           -moz-border-radius: 20px;
+                                border-radius: 20px; margin-right:10px}
+    a.button:hover .g-btn { background-color:#ccc; color:#666;}
+
+
+    /* ==========================================================================
+        Media
+    ============================================================================= */
+    @media only screen and (max-width:1100px) {
+    #body           { font-size:16px;}
+    h2              { font-size:30px; font-weight:200; margin-bottom:30px}
+    h3, .font-m     { font-size:18px; font-weight:400}
+    h4              { font-size:100%; font-weight:500; margin-top:20px  }
+    .font-normal    { font-size:16px; font-weight:500}
+
+    header .h-col1 		{ width:160px;}
+    header .h-col2 		{ width:calc(100% - 160px); } 
+    header .h-col2 ul   { margin:10px 0 0 0; padding:0; font-size:18px}
+
+
+	a.ac-btn,
+    a.ac-btn-admin      { font-size:30px;}
+    .admin .ac-pos      { margin-top:20px}
+    }
+
+    @media only screen and (max-width:1024px) {
+    .admin-inside .full-pg   { padding-left:30px; padding-right:30px;}
+    }
+
+    @media only screen and (min-device-width : 768px) and (max-device-width : 1024px) and (orientation : portrait) { 
+    .full-pg                 { padding-left:50px; padding-right:50px;}
+    }
+
+
+    @media only screen and (max-width:767px) {
+	#body	         { font-size:14px;}
+    h2               { font-size:26px; font-weight:200; margin-bottom:30px}
+    h3, .font-m      { font-size:17px; font-weight:400}
+    h4               { font-size:100%; font-weight:500; margin-top:20px  }
+    .font-normal     { font-size:14px; font-weight:500}
+    a.ac-btn-graytxt { font-size:20px; }
+
+	.full-pg  { padding-left:20px; padding-right:20px;}
+    header 				{ padding:15px 0; background-image:none;}
+    header .h-col1 		{ width:120px;}
+    header .h-col2 		{ width:calc(100% - 120px); text-align:right;}
+    header .h-col2 ul   { font-size:14px}
+    header .h-col2 .deadline { font-size:18px; font-weight:300; margin-top:-2px; line-height:1.2}
+    header .h-col2 .h-col2-pos { padding-left:10px}
+    header .h-col2 ul li        { padding:0 0 0 10px; font-weight:300 }
+
+ 
+ 	a.ac-btn,
+    a.ac-btn-admin  	{ font-size:25px;}
+    .admin .ac-pos      { margin-top:30px}
+    .admin-inside .full-pg   { padding-left:20px; padding-right:20px; overflow:hidden;}
+    }

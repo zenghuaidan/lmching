@@ -1,0 +1,24 @@
+	
+	.search-pos { float:right; margin-top:30px;}
+
+	form.example input[type=text] { padding:10px; height:25px; font-size:16px;
+									border: none; float:left; width:250px; background:#f1f1f1; outline:none;  border-radius: 0;}
+
+	form.example button 		{ float:left; width:50px; height:45px; padding:10px; background:#f1f1f1; font-size:16px;
+	    					  	  border:none; outline:none; cursor:pointer; color:#666; transition: all 0.3s ease-out}
+	form.example button:hover 	{ background:#fd7f2b; color:#fff}
+	form.example::after 		{ content: ""; clear:both; display:table;}
+
+	/* ==========================================================================
+        Media
+    ============================================================================= */
+    @media only screen and (max-width:1024px) {
+	form.example input[type=text] { width:200px;}
+    }
+
+    @media only screen and (max-width:767px) {
+ 	form.example input[type=text] { width:120px; padding:5px 10px; font-size:12px}
+	form.example button  { font-size:12px; height:35px}
+	.search-pos { margin-top:10px;}
+
+    }

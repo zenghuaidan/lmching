@@ -1,0 +1,10 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<body>		
+   		<div th:text="${year}"></div>
+		<div th:text="${mainCategory}"></div>
+		<ul th:each="subCategory : ${subCategories}">	    	
+	    	<span th:each="entry : ${subCategory}" th:text="${entry.key}"></span> ==> <span th:each="entry : ${subCategory}" th:text="${entry.value}"></span>
+        </ul>               
+	</body>
+</html>

@@ -1,0 +1,553 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<div th:replace="~{head :: head('Admin Login')}"></div>      
+<link rel="stylesheet" type="text/css" th:href="@{/css/input-admin.css}"/>
+<link rel="stylesheet" type="text/css" th:href="@{/css/select-box-admin.css}"/>
+<link rel="stylesheet" type="text/css" th:href="@{/css/admin.css}"/>
+<link rel="stylesheet" type="text/css" th:href="@{/css/search.css}"/> 
+	<script type="text/javascript" th:inline="javascript">
+		var categories = [[${designCategories}]]
+		var mainDesignCategory = [[${mainDesignCategory}]]
+		var subDesignCategory = [[${subDesignCategory}]]
+		var entrantNo = [[${entrantNo}]];
+		var size = [[${size}]]
+		var adminUrl = [[@{/admin}]]
+		var reportUrl = [[@{/report}]]
+		var page = parseInt([[${page}]]);
+		var totalPage = parseInt([[${totalPage}]]);
+		var sort = [[${sort}]]
+		
+		var confirmPaidUrl = [[@{/confirmPaid/}]]
+		var confirmWithPayaplPaidUrl = [[@{/confirmWithPayaplPaid/}]]
+		var resetPaypalStatusUrl = [[@{/resetPaypalStatus/}]]
+		/*<![CDATA[ */			
+			function customSelectChange(select) {
+				if($(select).attr("id") == 'mainDesignCategory') {
+					var mainDesignCategoryId = $("#mainDesignCategory").val();
+					$("#subDesignCategory option:gt(0)").remove();
+					for(var i = 0; i < categories.length; i++) {
+						if(categories[i].first.indexOf(mainDesignCategoryId + "_") >= 0) {
+							$("#subDesignCategory").append("<option value='" + categories[i].first.split("_")[1] + "'>" + categories[i].second + "</option>")
+						}
+					}
+					initSelect($("#subDesignCategory").parent().get(0));
+					if($("#mainDesignCategory").val() != '') {
+						mainDesignCategory = $("#mainDesignCategory").val();
+					}
+				} else if($(select).attr("id") == 'subDesignCategory') {
+					subDesignCategory = $("#subDesignCategory").val();
+				} else if($(select).attr("id") == 'size') {
+					page = 0;
+					size = $("#size").val();
+				}				
+			}
+			
+			function dispalySummaryContent(_this) {
+				if($(_this).find('i.fa-chevron-up').length == 1) {
+					$(_this).parent().next('tr.content').hide(); 
+				} else {
+					$(_this).parent().next('tr.content').show(); 					
+				}
+				$(_this).find('i').toggleClass('fa-chevron-up'); 
+				$(_this).find('i').toggleClass('fa-chevron-down');
+			}
+		
+			function next(_this) {
+				page = parseInt($(_this).attr("page"));				
+				totalPage = parseInt($(_this).attr("totalPage"));
+				if ((page + 1) < totalPage) {
+					page = page +1;
+					entrantNo = '';
+					doSearch();
+				}
+			}
+			
+			function prev(_this) {
+				page = parseInt($(_this).attr("page"));
+				totalPage = parseInt($(_this).attr("totalPage"));
+				if (page > 0) {
+					page = page - 1;					
+					entrantNo = '';
+					doSearch();
+				}
+			}
+			
+			function changeDirection(_this, sortField) {
+				var isAsc = $(_this).find("i").hasClass("fa-chevron-up");
+				//var isDesc = $(_this).find("i").hasClass("fa-chevron-down");				
+				sort = sortField + "," + (isAsc ? "DESC" : "ASC");
+				doSearch();
+			}
+			
+			function doSearch() {
+				var params = new Array();
+				if(entrantNo != '' && entrantNo != null) {
+					params.push("entrantNo=" + entrantNo);
+				} else {
+					if(subDesignCategory != '' && subDesignCategory != null) {
+						params.push("subDesignCategory=" + subDesignCategory);
+					}
+					if(mainDesignCategory != '' && mainDesignCategory != null) {
+						params.push("mainDesignCategory=" + mainDesignCategory);
+					}	
+					params.push("page=" + page);
+					params.push("size=" + size);
+					params.push("sort=" + sort);
+				}
+				if(params.length > 0) {
+					location.href = adminUrl + "?" + params.join("&");	
+				} else {
+					location.href = adminUrl;
+				}
+			}
+		
+			$(function() {				
+				$(".searchBtn").click(function() {
+					entrantNo = '';
+					page = 0;
+					doSearch();
+				});
+				$(".reportBtn").click(function() {
+					window.open(reportUrl, "_blank");
+				});
+				$("#m-mainDesignCategory").change(function() {
+					var mainDesignCategoryId = $("#m-mainDesignCategory").val();
+					$("#m-subDesignCategory option:gt(0)").remove();
+					for(var i = 0; i < categories.length; i++) {
+						if(categories[i].first.indexOf(mainDesignCategoryId + "_") >= 0) {
+							$("#m-subDesignCategory").append("<option value='" + categories[i].first.split("_")[1] + "'>" + categories[i].second + "</option>")
+						}
+					}
+					if($("#m-mainDesignCategory").val() != '') {
+						mainDesignCategory = $("#m-mainDesignCategory").val();
+					}					
+				});
+				$("#m-subDesignCategory").change(function() {
+					if($("#m-subDesignCategory").val() != '') {
+						subDesignCategory = $("#m-subDesignCategory").val();
+					}					
+				});
+				$("#m-size").change(function() {
+					if($("#m-size").val() != '') {
+						size = $("#m-size").val();
+					}					
+				});		
+				
+				$(".resetPaypalStatusBtn").click(function() {
+					var url = resetPaypalStatusUrl + $(this).attr("userid");
+					$("<div>Are you sure to reset PayPal status?</div>").dialog({
+				        resizable: false,
+				        height: "auto",
+				        width: 400,
+				        modal: true,
+				        buttons: {
+				          "Yes": function() {
+					            $( this ).dialog( "close" );					        	
+					            $.get(url, function (data) {
+					            	location.reload();
+					            }, "json");
+				          },
+				          "No": function() {
+				            $( this ).dialog( "close" );
+				          }
+				        }
+				      });
+				});
+				
+				$("#confirmPaidBtn").click(function() {
+					var url = confirmPaidUrl + $(this).attr("userid");
+					$("<div>Are you sure to confirm the payment</div>").dialog({
+				        resizable: false,
+				        height: "auto",
+				        width: 400,
+				        modal: true,
+				        buttons: {
+				          "Yes": function() {
+					            $( this ).dialog( "close" );
+					            $.get(url, function (data) {
+					            	location.reload();
+					            }, "json");
+				          },
+				          "No": function() {
+				            $( this ).dialog( "close" );
+				          }
+				        }
+				      });
+				});
+				$("#confirmWithPayaplPaidBtn").click(function() {
+					var url = confirmWithPayaplPaidUrl + $(this).attr("userid");
+					$("<div>Are you sure to confirm this payment is proceed by Paypal</div>").dialog({
+				        resizable: false,
+				        height: "auto",
+				        width: 400,
+				        modal: true,
+				        buttons: {
+				          "Yes": function() {
+					            $( this ).dialog( "close" );
+					            $.get(url, function (data) {
+					            	location.reload();
+					            }, "json");
+				          },
+				          "No": function() {
+				            $( this ).dialog( "close" );
+				          }
+				        }
+				      });
+				});
+				
+				$("#mainDesignCategory").val(mainDesignCategory);
+			    initSelect($("#mainDesignCategory").parent().get(0));
+			    customSelectChange($("#mainDesignCategory"));
+	    		$("#subDesignCategory").val(subDesignCategory);
+			    initSelect($("#subDesignCategory").parent().get(0));
+			    
+			    $("#size").val(size);
+			    initSelect($("#size").parent().get(0));
+			    
+			    $("#m-mainDesignCategory").val(mainDesignCategory);
+			    $("#m-mainDesignCategory").change();
+			    $("#m-subDesignCategory").val(subDesignCategory);
+			    $("#m-size").val(size);
+			    $("tr.content").hide()
+			});
+	 	/* ]]> */
+	</script>
+	<style>
+		.excelBtn, .zipBtn, .reportBtn, .searchBtn, .resetPaypalStatusBtn, .confirmPaidBtn {
+		    display: inline-block;
+		    /* margin-top: 15px; */
+		    margin-bottom: 10px;
+		    vertical-align: middle;
+		    color: rgb(255, 255, 255);
+		    background-color: #fd7f2b;
+		    text-align: center;
+		    cursor: pointer;
+		    white-space: nowrap;
+		    box-shadow: rgba(0, 0, 0, 0.12) 0px 2px 6px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+		    font-family: 微软雅黑;
+		    border-width: initial;
+		    border-style: none;
+		    border-color: initial;
+		    border-image: initial;
+		    outline: 0px;
+		    padding: 8px 18px;
+		    overflow: hidden;
+		    text-decoration: none;
+		    transition: 0.2s ease-out;
+		    border-radius: 2px;
+		}
+		
+		.resetPaypalStatusBtn, .confirmPaidBtn {
+			width: 130px;
+		}
+		
+	</style>
+<body id="body" class="en admin admin-inside">
+	<header>
+		<a th:href="@{/logout}" style="margin-right: 100px;float: right;cursor: pointer; z-index: 1000;color:orange;">Logout</a>
+		<div class="full-pg clearfix">
+			<div class="h-col1"><img th:src="@{/images/logo.svg}" alt="HKDA"/></div>
+			<div class="h-col2">
+				<div class="search-pos clearfix">
+					<form class="example">
+					  	<input id="entrantNo" type="text" placeholder="Entrant No." name="entrantNo" th:value="${entrantNo}" />
+  						<button type="submit"><i class="fa fa-search"></i></button>  						
+					</form>
+      			</div>
+			</div>
+		</div>
+	</header>
+
+	<div class="full-pg pg-edge-tb">
+		<form id="submitForm" method="post">
+			<fieldset style="border: 1px solid #fd7f2b;">  
+				<legend style="color:#fd7f2b; font-weight:bold; padding: 0 5px 0 5px;">Manage Award Data</legend> 
+				<br/>  
+	          	<div class="select-d clearfix">
+	                <div class="filter-col1" style="width:100% !important;">
+	                    <span class="select sep" style="display:inline-block" >
+	                        <div class="custom-select">
+	                            <select name="year">
+	                                <option th:each="year : ${#numbers.sequence(2018, 2050)}" 
+											th:value="${year}" 
+											th:text="${year}" ></option>
+	                            </select>
+	                        </div>
+	                    </span>	                    	                   
+						&nbsp;&nbsp;<input type="file" name="uploadFile" />
+						<p class="zipBtn" th:action="@{/uploadImages}" id="uploadImageBtn">Upload Image</p>
+						<p class="excelBtn" th:action="@{/uploadAwards}" id="uploadAwardBtn">Upload Award</p>
+						<p class="excelBtn" th:action="@{/downloadAwards}" id="downloadAwardBtn">Download Award</p>		
+	            	</div>                    
+	            </div>
+           	</fieldset>
+      	</form>  
+      	<br/><br/>
+		<div class="info">
+			<div class="info-row">
+				<h3><p>Entries:</p></h3><h3>[[${paidEntryCount}]] / [[${entryCount}]]</h3>
+				<h3><p>Entrant:</p></h3><h3>[[${paidEntrantCount}]] / [[${entrantCount}]]</h3>
+			</div>
+			<div class="info-row">
+				<h3><p>HK:</p></h3><h3>[[${HKDPaidTotal}]] / [[${HKDTotal}]]</h3>
+				<h3><p>RMB:</p></h3><h3>[[${RMBPaidTotal}]] / [[${RMBTotal}]]</h3>
+				<h3><p>USD:</p></h3><h3>[[${USDPaidTotal}]] / [[${USDTotal}]]</h3>
+			</div>
+			<table cellspacing="5" cellpadding="0" class="table-info">
+				<tr>
+				    <td>Entries:</td>
+				    <td>[[${paidEntryCount}]] / [[${entryCount}]]</td>
+				</tr>
+				<tr>
+				    <td>Entrant:</td>
+				    <td>[[${paidEntrantCount}]] / [[${entrantCount}]]</td>
+				</tr>
+				<tr>
+				    <td>HK:</td>
+				    <td>[[${HKDPaidTotal}]] / [[${HKDTotal}]]</td>
+				</tr>
+				<tr>
+				    <td>RMB:</td>
+				    <td>[[${RMBPaidTotal}]] / [[${RMBTotal}]]</td>
+				</tr>
+				<tr>
+				    <td>USD:</td>
+				    <td>[[${USDPaidTotal}]] / [[${USDTotal}]]</td>
+				</tr>
+			</table>
+		</div>
+
+		<div>
+			<div class="filter">
+               	<div class="select-d clearfix">
+                    <div class="filter-col1">
+	                    <span class="select sep" style="display:inline-block" >
+	                        <div class="custom-select">
+	                            <select id="mainDesignCategory" name="mainDesignCategory">
+	                                <option value="">Category</option>
+	                                <option th:each="category : ${designCategories}" 
+										th:value="${#strings.setSplit(category.first, '_')[1]}" 
+										th:text="${category.second}"
+										th:if="${#strings.startsWith(category.first, '0_')}" ></option>
+	                            </select>
+	                        </div>
+	                    </span>
+	                    <span class="select sep" style="display:inline-block" >
+	                        <div class="custom-select">
+	                            <select id="subDesignCategory" name="subDesignCategory">
+	                                <option value="">Sub-Category</option>	                                
+	                            </select>
+	                        </div>
+	                    </span>
+	                    <span class="select sep" style="display:inline-block" >
+	                        <div class="custom-select small">
+	                            <select name="size" id="size">
+	                                <option th:selected="${size == _size}" th:value="${_size}" th:each="_size : ${#strings.listSplit('5,10,15,20',',')}">[[${_size}]] per page</option>
+	                            </select>
+	                        </div>
+	                    </span>
+	                    <p class="searchBtn">Search</p>
+	                    <p class="reportBtn">Download Report</p>
+	                </div>
+                    <div class="filter-col2 page">
+                    	<a href="javascript:prev(this);" th:attr="page=${page},totalPage=${totalPage}"><i class="fa fa-angle-left"></i></a>  [[${page} + 1]] of [[${totalPage}]] <a href="javascript:next(this);" th:attr="page=${page},totalPage=${totalPage}"><i class="fa fa-angle-right"></i></a>
+                    </div>
+                </div>
+
+                <!-- for small device!-->
+<!--                 <div class="select-m">
+                    <div>
+                        <select id="m-mainDesignCategory" name="mainDesignCategory">
+                            <option value="">Category</option>
+                            <option th:each="category : ${designCategories}" 
+								th:value="${#strings.setSplit(category.first, '_')[1]}" 
+								th:text="${category.second}"
+								th:if="${#strings.startsWith(category.first, '0_')}" ></option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <select id="m-subDesignCategory" name="subDesignCategory">
+	                        <option value="">Sub-Category</option>
+                        </select>
+                    </div>
+                     <div>
+                        <select name="size" id="m-size">
+                            <option th:selected="${size == _size}" th:value="${_size}" th:each="_size : ${#strings.listSplit('5,10,15,20',',')}">[[${_size}]] per page</option>                            
+                        </select>
+                    </div>
+                </div>
+                <div class="filter-col2 page" style="margin-top:-10px">
+                	<a href="javascript:prev(this);" th:attr="page=${page},totalPage=${totalPage}"><i class="fa fa-angle-left"></i></a> [[${page} + 1]] of [[${totalPage}]] <a href="javascript:next(this);" th:attr="page=${page},totalPage=${totalPage}"><i class="fa fa-angle-right"></i></a>
+                </div> -->
+
+			</div>
+
+
+			<table class="summary" cellspacing="0" cellpadding="0">
+			  	<tr>
+				    <th style="cursor:pointer" onclick="changeDirection(this, 'id')"><i th:class="'fa arrow ' + (${property} == 'id' ? ((${direction} == 'ASC')? 'fa-chevron-up' : 'fa-chevron-down') : '')"></i>Entrant No</th>
+				    <th style="cursor:pointer" onclick="changeDirection(this, 'entrantName')"><i th:class="'fa arrow ' + (${property} == 'entrantName' ? (${direction} == 'ASC' ? 'fa-chevron-up' : 'fa-chevron-down') : '')"></i>Entrant Name</th>
+				    <th style="cursor:pointer" onclick="changeDirection(this, 'paid')"><i th:class="'fa arrow ' + (${property} == 'paid' ? (${direction} == 'ASC' ? 'fa-chevron-up' : 'fa-chevron-down') : '')"></i>Entry (Registered/Paid)</th>
+				    <th>&nbsp;</th>
+			  	</tr>
+			  	<th:block th:each="user : ${users}">
+				  	<tr>
+					    <td onclick="dispalySummaryContent(this)" style="cursor:pointer"><i class="fa fa-chevron-down arrow"></i>[[${user.entrantNo}]]</td>
+					    <td th:text="${user.entrantName}"></td>
+					    <td>[[${user.moneyCode}]] [[${feeMap.get(user.id)}]] ([[${user.paidDesc}]])</td>
+					    <td>
+					    	<label th:if="${!user.paidConfirm && user.paid}" class="confirmPaidBtn" id="confirmPaidBtn" th:attr="userid=${user.id}">Confirm Paid</label>	   						
+					    	<label th:if="${!user.paid}" class="confirmPaidBtn" id="confirmWithPayaplPaidBtn" th:attr="userid=${user.id}">Confirm with Paypal</label>	   						
+	   					</td>	   					
+				  	</tr>
+				  	<tr class="content">
+				   	 	<td colspan="4">
+				   	 		<div class="content-style">
+				   	 			<div class="co-row">
+					   	 			<p>Contact Info</p>
+					   	 			[[${user.name}]]<br/>
+					   	 			[[${user.email}]]<br/>
+					   	 			Address: [[${user.address}]]
+					   	 		</div>
+								<th:block th:each="entry : ${entryMap.get(user.id)}">
+									<th:block th:each="referenecNo : ${entry.referenecNoList}">
+						   	 			<div class="co-row">
+							   	 			<div class="field">
+							   	 				<p>[[${referenecNo}]]</p>
+								   	 			[[${entry.title}]]
+								   	 		</div>
+								   	 		<div class="field">
+								   	 			<p>Description</p>
+												[[${entry.description}]]
+											</div>
+											<div class="field">
+												<table class="detail" cellspacing="0" cellpadding="0">									
+												  	<tr  th:each="credit : ${entry == null ? null : entry.credits}">
+													    <td th:text="${categoriesMap.get(credit.first)}"></td>
+													    <td th:text="${credit.second}"></td>
+												  	</tr>													
+												</table>
+											</div>
+							   	 		</div>				   	 			
+									</th:block>
+								</th:block>
+	
+					   	 		<div th:if="${not #lists.isEmpty(entryMap.get(user.id))}" class="summary-btn" th:onclick="'javascript:window.open(\''+@{/printLabel/}+${user.id} + '\');'"><div class="icon-btn"><i class="fa fa-print"></i></div><div class="font-m">Entry label(s)</div></div>
+					   	 		<div class="summary-btn" th:onclick="'javascript:window.open(\''+@{/paymentSummary/}+${user.id} + '\');'"><div class="icon-btn"><i class="fa fa-print"></i></div><div class="font-m">Payment summary</div></div>
+	
+				   	 		</div>
+				   	 	</td>
+				  	</tr>
+			  	</th:block>			  	
+			</table>     
+	    </div>
+	</div>	
+	<script th:src="@{/script/classie.js}"></script>
+	<script th:src="@{/script/custom-select.js}"></script>
+	<script type="text/javascript" th:inline="javascript">
+		$(function() {
+		    $('#submitForm').ajaxForm(function(data) {
+		    	var hasError = data != 'Upload finish';
+				$("<div " + (hasError ? "style='overflow-y: scroll;'" : "") + ">" + data + "</div>").dialog({
+			        resizable: false,
+			        height: hasError ? "200" : "auto",
+			        width: hasError ? "auto" : "300",
+			        modal: true,
+			        buttons: {
+			          	"OK": function() {				        	  	
+					    	$( this ).dialog( "close" );
+			          	}
+			        }
+      			});
+     		});
+		    $("#uploadImageBtn").click(function() {
+		    	var file = $("#submitForm input[type=file]").val();
+		    	if (file == "" || file.split(".")[file.split(".").length - 1].toLocaleLowerCase() != "zip") {
+					$("<div>Please select zip file to upload.</div>").dialog({
+				        resizable: false,
+				        height: "auto",
+				        width: 400,
+				        modal: true,
+				        buttons: {
+				          	"OK": function() {				        	  	
+						    	$( this ).dialog( "close" );
+				          	}
+				        }
+	      			});
+		    		return;
+		    	}
+		    	
+		    	var action = $(this).attr("action");
+				$("<div>You are going to upload the award images, it won't delete any previous upload award images. But if a file already exists in server, it will be replaced with the new upload one.<br/><br/>If you want to upload the 5 index banner images, say year 2018, just include below five images files within the upload zip file:<br/><table><tr><td>Left Banner:</td><td><label style='color:red;font-weight: bold;'>2018-1.jpg</label></td></tr> <tr><td>DIGITAL Banner:</td><td><label style='color:red;font-weight: bold;'>2018-2.jpg</label></td></tr> <tr><td>GRAPHICS Banner:</td><td><label style='color:red;font-weight: bold;'>2018-3.jpg</label></td></tr> <tr><td>PRODUCT Banner:</td><td><label style='color:red;font-weight: bold;'>2018-4.jpg</label></td></tr> <tr><td>SPATIAL Banner:</td><td><label style='color:red;font-weight: bold;'>2018-5.jpg</label></td></tr></table></div>").dialog({
+			        resizable: false,
+			        height: "auto",
+			        width: 400,
+			        modal: true,
+			        buttons: {
+			          "Yes": function() {
+			        	  	$('#submitForm').attr("action", action);
+					    	$("#submitForm").submit();
+					    	$( this ).dialog( "close" );
+			          },
+			          "No": function() {
+			            	$( this ).dialog( "close" );
+			          }
+			        }
+      			});		    		    			    
+		    });
+			$("#uploadAwardBtn").click(function() {
+				var file = $("#submitForm input[type=file]").val();
+		    	if (file == "" || file.split(".")[file.split(".").length - 1].toLocaleLowerCase() != "xlsx") {		    		
+					$("<div>Please select excel(.xlsx) file to upload.</div>").dialog({
+				        resizable: false,
+				        height: "auto",
+				        width: 400,
+				        modal: true,
+				        buttons: {
+				          	"OK": function() {				        	  	
+						    	$( this ).dialog( "close" );
+				          	}
+				        }
+	      			});
+		    		return;
+		    	}
+		    	var year = $("select[name='year']").val();
+		    	var action = $(this).attr("action");
+				$("<div>Are you sure to reupload the award records for " + year + "? <br/>This will delete all " + year + " records and upload with current upload excel data.</div>").dialog({
+			        resizable: false,
+			        height: "auto",
+			        width: 400,
+			        modal: true,
+			        buttons: {
+			          "Yes": function() {
+			        	  	$('#submitForm').attr("action", action);
+					    	$("#submitForm").submit();
+					    	$( this ).dialog( "close" );
+			          },
+			          "No": function() {
+			            	$( this ).dialog( "close" );
+			          }
+			        }
+      			});
+		    });
+			$("#downloadAwardBtn").click(function() {
+				var year = $("select[name='year']").val();
+		    	var action = $(this).attr("action");
+				$("<div>You are going to download the " + year + " award data.</div>").dialog({
+			        resizable: false,
+			        height: "auto",
+			        width: 400,
+			        modal: true,
+			        buttons: {
+			          	"OK": function() {				        	  	
+							window.open(action + "?year=" + year);
+					    	$( this ).dialog( "close" );
+			          	}
+			        }
+      			});
+			});
+		});
+	</script>
+</body>
+</html>

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<div th:replace="~{head :: head(#{login.browser_title})}"></div>
+
+<body id="body" class="en">
+	<div th:replace="~{loading :: loading}"></div>
+	<div th:replace="~{header :: header}"></div>
+
+	<div class="full-pg pg-edge-tb">
+		<form autocomplete="off" id="loginForm" th:action="@{/doLogin}" method="post">
+			<div class="login">
+				<p th:utext="#{login.loginbox.title}" th:hidden="${@hkdaProperties.closeForm}"></p>
+				<section class="text-effect pos">
+		            <span class="input input--ruri">
+		                <input class="input__field input__field--ruri" type="text" id="login_email" name="login_email" />
+		                <label class="input__label input__label--ruri" for="login_mail">
+		                    <span class="input__label-content input__label-content--ruri" th:text="#{login.loginbox.email}"></span>
+		               </label>
+		            </span>
+		            <span class="input input--ruri" style="margin-right:0">
+		                <input class="input__field input__field--ruri" type="password" id="login_password" name="login_password" />
+		                <label class="input__label input__label--ruri" for="login_password">
+		                    <span class="input__label-content input__label-content--ruri" th:text="#{login.loginbox.password}"></span>
+		                </label>
+		            </span>
+		        </section>
+			    <div class="error" th:text="${session.loginFailMsg}" th:style="${session.loginFailMsg} == '' ? '' : 'display:block'"></div>
+	
+		        <div class="login-bottom clearfix">
+		        	<div class="lb-col1"><a target="_blank" th:href="@{/forgetpassword}" class="fp" th:text="#{login.loginbox.forget_password}"></a></div>
+		        	<div class="lb-col2"><a href="javascript:$('#loginForm').submit();" class="ac-btn" th:inline="text">[[#{login.loginbox.loginBtn}]]<i class="fa fa-chevron-right"></i></a></div>
+		        </div>
+			</div>
+		</form>
+
+		<a name="register"></a>
+		<form autocomplete="off" id="registerForm" th:hidden="${@hkdaProperties.closeForm}">
+			<div class="register pg-edge-tb">
+				<div>
+					<h4 th:inline="text">[[#{login.register.title}]]</h4>
+					<div class="sel-entrant-type">
+						<div class="custom-select">
+						  <select id="entryType" name="type">
+						    <option value="" th:text="#{login.register.entrant_type}"></option>
+						    <option th:each="entrantType : ${entrantTypes}" th:value="${entrantType.first}" th:text="${entrantType.second}"></option>
+						  </select>
+						</div>
+					</div>
+					<section class="full-w text-effect pos">
+						<div class="error typeError" th:text="#{login.register.entrant_type_error}"></div>
+					</section>
+	
+					<section class="full-w text-effect pos">
+						<h4 th:text="#{login.register.entrant_name_title}"></h4>
+			            <span class="input input--ruri">
+			                <input class="input__field input__field--ruri" type="text" id="entrantName" name="entrantName" />
+			                <label class="input__label input__label--ruri" for="entrantName">
+			                    <span class="input__label-content input__label-content--ruri" th:text="#{login.register.entrant_name_placeholder}"></span>
+			               </label>
+			            </span>
+			            <div class="error entrantNameError" th:text="#{login.register.entrant_name_error}"></div>
+			            
+			            <h4 th:text="#{login.register.name_title}"></h4>
+			            <span class="input input--ruri" style="margin-right:0">
+			                <input class="input__field input__field--ruri" type="text" id="name" name="name" />
+			                <label class="input__label input__label--ruri" for="name">
+			                    <span class="input__label-content input__label-content--ruri" th:text="#{login.register.name_placeholder}"></span>
+			               </label>
+			            </span>
+			           	<div class="error nameError" th:text="#{login.register.name_error}"></div>
+	
+			            <span class="input input--ruri" style="margin-right:0">
+			                <input class="input__field input__field--ruri" type="text" id="email" name="email" />
+			                <label class="input__label input__label--ruri" for="email">
+			                    <span class="input__label-content input__label-content--ruri" th:text="#{login.register.email_placeholder}"></span>
+			               </label>
+			            </span>
+			            <div class="error emailError" th:text="#{login.register.email_error}"></div>
+	
+			            <span class="input input--ruri" style="margin-right:0">
+			                <input onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')" class="input__field input__field--ruri" type="number" id="phone" name="phone" />
+			                <label class="input__label input__label--ruri" for="phone">
+			                    <span class="input__label-content input__label-content--ruri" th:text="#{login.register.phone_placeholder}"></span>
+			               </label>
+			            </span>
+			            <div class="error phoneError" th:text="#{login.register.phone_error}"></div>
+			            
+			            <span class="input input--ruri" style="margin-right:0">
+			                <input class="input__field input__field--ruri" type="text" id="address" name="address" />
+			                <label class="input__label input__label--ruri" for="address">
+			                    <span class="input__label-content input__label-content--ruri" th:text="#{login.register.address_placeholder}">Address</span>
+			               </label>
+			            </span>
+			            <div class="error addressError" th:text="#{login.register.address_error}"></div>
+			            		            
+			            <span class="input input--ruri" style="margin-right:0">
+			                <input class="input__field input__field--ruri" type="text" id="city" name="city" />
+			                <label class="input__label input__label--ruri" for="city">
+			                    <span class="input__label-content input__label-content--ruri" th:text="#{login.register.city_placeholder}"></span>
+			               </label>
+			            </span>
+			            <div class="error cityError" th:text="#{login.register.city_error}"></div>
+			            
+						<div class="sel-entrant-type gray">
+							<div id="country" class="custom-select country">
+							  <select id="country" name="country">
+							    <option value="" th:text="#{login.register.country}"></option>
+					            <option th:each="country : ${countries}" th:value="${country.first}" th:text="${country.second}"></option>
+							  </select>
+							</div>
+						</div>
+						<div class="error countryError" th:text="#{login.register.country_error}"></div>
+						
+			            <span class="input input--ruri" style="margin-right:0">
+			                <input class="input__field input__field--ruri" type="text" id="postalCode" name="postalCode" />
+			                <label class="input__label input__label--ruri" for="postalCode">
+			                    <span class="input__label-content input__label-content--ruri" th:text="#{login.register.postal_code_placeholder}"></span>
+			               </label>
+			            </span>
+			            
+	   		            <span class="input input--ruri" style="margin-right:0">
+			                <input class="input__field input__field--ruri" type="password" id="password" name="password"/>
+			                <label class="input__label input__label--ruri" for="password">
+			                    <span class="input__label-content input__label-content--ruri" th:text="#{login.register.password_placeholder}"></span>
+			               </label>
+			            </span>
+			            <div class="error passwordError" th:text="#{login.register.password_error}"></div>
+			            
+			            <span class="input input--ruri" style="margin-right:0">
+			                <input class="input__field input__field--ruri" type="password" id="verifyPassword" name="verifyPassword"/>
+			                <label class="input__label input__label--ruri" for="verifyPassword">
+			                    <span class="input__label-content input__label-content--ruri" th:text="#{login.register.verify_password_placeholder}"></span>
+			               </label>
+			            </span>
+			            <div class="error verifyPasswordError" th:text="#{login.register.verify_password_error}"></div>
+			            <div class="error differentPasswordError" th:text="#{login.register.different_password_error}"></div>
+			            <div class="error userExistError" th:text="#{login.register.user_exist_error}"></div>
+			        </section>
+	
+			        <!-- <div class="action-blk clearfix">
+			        	<a class="button" href="#" target="_blank"><span class="g-btn">Password</span></a>
+	                    <a class="button" href="#" target="_blank"><span class="g-btn">Verify Password</span></a>
+			        </div> -->
+			        <div class="txt-r"><a href="javascript:register();" class="ac-btn" th:inline="text">[[#{login.register.registerBtn}]]<i class="fa fa-chevron-right"></i></a></div>
+				</div>
+	
+			</div>
+		</form>
+	</div>
+	<script th:src="@{/script/classie.js}"></script>
+	<script th:src="@{/script/custom-select.js}"></script>
+	<script type="text/javascript" th:inline="javascript">
+		var regesterUrl = [[@{/register}]]			
+		var registerSuccessMsg = [[#{login.register.success}]]
+		/*<![CDATA[ */
+			function register() {
+				showLoading();
+	            $.post(regesterUrl, $("#registerForm").serialize(), function (data) {
+	            	hideLoading();
+	            	$("div[class*=Error]").hide();
+               		for(var i = 0; i < data.length; i++) {
+               			$("div." + data[i] + "Error").show();
+               		}
+               		if(data.length == 0) {
+               			$("#registerForm").get(0).reset()
+               			$(window).scrollTop(0);
+               			$("<div>" + registerSuccessMsg + "</div>").dialog(
+           					{
+           					  	close: function( event, ui ) {$(window).scrollTop(0);}
+           					}		               			               			
+               			);
+               		}
+	               	
+	            }, "json");		
+			}			
+	 	/* ]]> */
+	</script>
+</body>
+</html>

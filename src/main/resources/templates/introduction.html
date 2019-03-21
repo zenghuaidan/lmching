@@ -1,0 +1,247 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<div th:replace="~{head :: head(#{introduction.browser_title})}"></div>
+
+<body id="body" class="en">
+	<div th:replace="~{loading :: loading}"></div>
+	<div th:replace="~{header :: header}"></div>	
+	<form id="submitForm" th:action="@{/submit}" enctype="multipart/form-data" method="post" autocomplete="off">
+		<input type="hidden" name="id" th:value="${entry} == null ? '' : ${entry.id}" />
+		<div class="full-pg pg-edge-tb">
+			<h2 th:if="${not @hkdaProperties.closeForm}" class="ti-col1" th:text="#{introduction.title}"></h2>
+			<h3 th:if="${not @hkdaProperties.closeForm}" th:utext="${user.paid} ? #{introduction.description_for_paid} : #{introduction.description}"></h3>
+			<div class="intro-blk clearfix">
+				<div class="in-col1" th:utext="${@hkdaProperties.closeForm} ? '&nbsp;' : ${entryCountInfo}"></div>
+				<div class="in-col2" th:if="${not #lists.isEmpty(entries)}">
+					<div class="txt-r"><a th:href="@{/submit}" class="ac-btn-graytxt">[[#{introduction.submitBtn}]] <i class="fa fa-chevron-right"></i></a></div>
+				</div>
+			</div>
+						
+			<div class="intro">
+	
+				<div class="sel-entrant-type">
+					<div class="custom-select">
+						<select id="mainDesignCategory" name="mainDesignCategory">
+						    <option value="" th:text="#{introduction.design_category}"></option>
+							<option th:each="category : ${designCategories}" 
+								th:value="${#strings.setSplit(category.first, '_')[1]}" 
+								th:text="${category.second}"
+								th:if="${#strings.startsWith(category.first, '0_')}" ></option>
+						</select>
+					</div>
+				</div>
+				<section class="full-w text-effect pos">
+					<div class="error mainDesignCategoryError" th:text="#{introduction.entry_main_design_category_error}"></div>
+				</section>
+	
+				<div class="sel-entrant-type sub-cat">
+					<div class="custom-select small">
+						<select id="subDesignCategory" name="subDesignCategory">
+						    <option value="" th:text="#{introduction.sub_design_category}"></option>
+						</select>
+					</div>
+				</div>				
+				<section class="full-w text-effect pos">
+					<div class="error subDesignCategoryError" th:text="#{introduction.entry_sub_design_category_error}"></div>
+				</section>
+	
+	
+				<section class="full-w text-effect pos">
+			        <span class="input input--ruri">
+			            <input th:readonly="${not @hkdaProperties.forceEnableEntryEdit and (user.paid or @hkdaProperties.closeForm)}" class="input__field input__field--ruri" type="text" id="title" name="title" th:value="${entry} == null ? '' : ${entry.title}" />
+			            <label class="input__label input__label--ruri" for="title">
+			                <span class="input__label-content input__label-content--ruri" th:text="#{introduction.entry_title}"></span>
+			            </label>
+			        </span>
+			        <div class="error titleError" th:text="#{introduction.entry_title_error}"></div>
+	
+					<div category="_1_2_3" class="sel-entrant-type sub-cat">
+						<div class="custom-select small">
+							<select id="single" name="single">							    
+							    <option value="1" th:text="#{introduction.entry_single}"></option>
+							    <option value="0" th:text="#{introduction.entry_series}"></option>
+							</select>
+						</div>
+					</div>					
+					
+					<span category="_2_3" class="input input--ruri">
+			            <input th:readonly="${not @hkdaProperties.forceEnableEntryEdit and (user.paid or @hkdaProperties.closeForm)}" class="input__field input__field--ruri" type="text" id="labelCount" name="labelCount" th:value="${entry} == null ? '' : ${entry.labelCount}"  onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')"/>
+			            <label class="input__label input__label--ruri" for="labelCount">
+			                <span class="input__label-content input__label-content--ruri" th:text="#{introduction.entry_label}"></span>
+			            </label>
+			        </span>
+			        <div class="error labelCountError" th:text="#{introduction.entry_label_error}"></div>												        
+	
+			        <div class="textarea clearfix">
+				        <div class="font-m" th:utext="#{introduction.entry_description_title}"></div>
+				        <textarea th:readonly="${not @hkdaProperties.forceEnableEntryEdit and (user.paid or @hkdaProperties.closeForm)}" style="resize:none;overflow-y:scroll;" onkeyup="$(this).val(this.value.substring(0, 600))" name="description" rows="10" cols="20" th:placeholder="#{introduction.entry_description_placeholder}">[[${entry} == null ? '' : ${entry.description}]]</textarea>
+				    </div>
+				    <section class="full-w text-effect pos">				
+						<div class="error descriptionError" th:text="#{introduction.description_error}"></div>
+					</section>
+				    
+				    <span category="_3" class="input input--ruri">
+			            <input th:readonly="${not @hkdaProperties.forceEnableEntryEdit and (user.paid or @hkdaProperties.closeForm)}" class="input__field input__field--ruri" type="text" id="linkToVideo" name="linkToVideo" th:value="${entry} == null ? '' : ${entry.linkToVideo}" />
+			            <label class="input__label input__label--ruri" for="linkToVideo">
+			                <span class="input__label-content input__label-content--ruri" th:text="#{introduction.entry_link_to_video}"></span>
+			            </label>
+			        </span>
+			        <div class="error linkToVideo" th:text="#{introduction.entry_link_to_video_error}"></div>
+			        
+			        <span category="_1" class="input input--ruri">
+			            <input th:readonly="${not @hkdaProperties.forceEnableEntryEdit and (user.paid or @hkdaProperties.closeForm)}" class="input__field input__field--ruri" type="text" id="linkToWebsite" name="linkToWebsite" th:value="${entry} == null ? '' : ${entry.linkToWebsite}" />
+			            <label class="input__label input__label--ruri" for="linkToWebsite">
+			                <span class="input__label-content input__label-content--ruri" th:text="#{introduction.entry_link_to_website}"></span>
+			            </label>
+			        </span>
+			        <div class="error linkToWebsiteError" th:text="#{introduction.entry_link_to_website_error}"></div>			       			       
+			        
+			        <div category="_1_3" class="textarea clearfix">
+				        <div class="font-m" th:utext="#{introduction.entry_username_password_for_link}"></div>
+				        <textarea th:readonly="${not @hkdaProperties.forceEnableEntryEdit and (user.paid or @hkdaProperties.closeForm)}" style="resize:none;" name="userNameAndPasswordForLink" rows="10" cols="20" th:placeholder="#{introduction.entry_username_password_for_link_placeholder}">[[${entry} == null ? '' : ${entry.userNameAndPasswordForLink}]]</textarea>
+				    </div>
+			        			        			        
+		            <input id="pdf" type="file" name="pdf" style="display:none;" />		            
+			        <div category="_4" class="action-blk upload clearfix" style="margin-top:20px;">
+			        	<a th:if="${@hkdaProperties.forceEnableEntryEdit or (not user.paid and not @hkdaProperties.closeForm)}" class="button" href="javascript:$('#pdf').click();"><span class="g-btn"><i class="fa fa-upload"></i>[[#{introduction.entry_pdf}]]</span></a>
+			        	<label th:attr="tag=${entry} == null ? '' : ${entry.oriPdfFileName}" style="cursor:pointer;color:#fd7f2b;" id="pdflabel" class="font-m" th:onclick="'javascript: if($(this).attr(\'tag\') != undefined) window.open(\''+@{/docs/}+${entry == null ? '' : entry.pdfFileName} + '\');'">[[${entry} == null ? '' : ${entry.oriPdfFileName}]]</label>
+			        </div>	
+			        <section class="full-w text-effect pos">        		        
+			        	<div class="error pdfError" th:text="#{introduction.entry_pdf_error}"></div>
+			        </section>			        
+			        
+			        <div category="_1" class="textarea clearfix">
+				        <div class="font-m" th:utext="#{introduction.entry_key_page}"></div>
+				        <textarea th:readonly="${not @hkdaProperties.forceEnableEntryEdit and (user.paid or @hkdaProperties.closeForm)}" style="resize:none;" name="keyPage" rows="10" cols="20" th:placeholder="#{introduction.entry_key_page_placehoder}">[[${entry} == null ? '' : ${entry.keyPage}]]</textarea>
+				    </div>				    		        			        
+			        
+				   <div class="entry-credit">
+				        <div class="font-m" th:utext="#{introduction.entry_credit_title}"></div>
+						<div th:if="${@hkdaProperties.forceEnableEntryEdit or (not user.paid and not @hkdaProperties.closeForm)}" class="sel-entrant-type">
+							<div class="custom-select small">
+								<select id="creditCategory">
+								    <option value="" th:text="#{introduction.entry_credit}"></option>
+								    <option th:each="category : ${creditCategories}" 
+										th:value="${#strings.setSplit(category.first, '_')[1]}" 
+										th:text="${category.second}"
+										th:if="${#strings.startsWith(category.first, '0_')}" ></option>
+								</select>
+							</div>
+						</div>
+	
+	
+						<div class="entry-credit-result">
+							<ul>								
+								<li th:each="credit,stat : ${entry == null ? null : entry.credits}">
+									<span th:text="${categoriesMap.get(credit.first)}"></span>
+									<input th:readonly="${not @hkdaProperties.forceEnableEntryEdit and (user.paid or @hkdaProperties.closeForm)}" type='text' th:name="'credit_' + ${credit.first} + '_' + ${stat.index}" class='input-gray' th:value="${credit.second}" />
+									<i th:if="${@hkdaProperties.forceEnableEntryEdit or (not user.paid and not @hkdaProperties.closeForm)}" class='fa fa-times' onclick='$(this).parent().remove();'></i>
+								</li>													
+							</ul>
+						</div>
+				   </div>
+			    </section>
+	
+	
+				<div class="intro-blk clearfix">
+					<div class="in-col1" th:utext="${@hkdaProperties.closeForm} ? '&nbsp;' : ${entryCountInfo}"></div>
+					<div th:if="${@hkdaProperties.forceEnableEntryEdit or (not user.paid and not @hkdaProperties.closeForm)}" class="in-col2">
+						<div class="txt-r"><a href="javascript:submitForm();" class="ac-btn-graytxt">[[#{introduction.savaBtn}]] <i class="fa fa-chevron-right"></i></a></div>
+					</div>
+				</div>
+	
+			</div>
+		</div>
+	</form>
+	<script th:src="@{/script/classie.js}"></script>
+	<script th:src="@{/script/custom-select.js}"></script>
+		<script type="text/javascript" th:inline="javascript">
+		var categories = [[${designCategories}]]		
+		var submitUrl = [[@{/submit}]]
+		/*<![CDATA[ */
+			function initDesignCategoryFields(category) {
+				var fields = $("[category]");
+				for(var i = 0; i < fields.length; i++) {
+					if (fields.eq(i).attr("category").indexOf("_" + category) >= 0) {
+						fields.eq(i).show();
+					} else {
+						fields.eq(i).hide();
+					}
+				}
+			}
+			function customSelectChange(select) {
+				if($(select).attr("id") == 'mainDesignCategory') {
+					var mainDesignCategoryId = $("#mainDesignCategory").val();
+					$("#subDesignCategory option:gt(0)").remove();
+					for(var i = 0; i < categories.length; i++) {
+						if(categories[i].first.indexOf(mainDesignCategoryId + "_") >= 0) {
+							$("#subDesignCategory").append("<option value='" + categories[i].first.split("_")[1] + "'>" + categories[i].second + "</option>")
+						}
+					}
+					initSelect($("#subDesignCategory").parent().get(0));
+					initDesignCategoryFields($("#mainDesignCategory").val());
+				}
+				if ($(select).attr("id") == 'creditCategory') {
+					if($('#creditCategory').val() != '') {
+						$('.entry-credit-result').find("ul").append("<li><span>" + $('#creditCategory').find("option[value='" + $('#creditCategory').val() + "']").text() + ":</span><input type='text' name='credit_" + $('#creditCategory').val() + "_" + ($('.entry-credit-result').find("ul").find("li").length + 1) + "' class='input-gray' /><i class='fa fa-times' onclick='$(this).parent().remove();'></i></li>")
+					}					
+				}
+			}
+			function submitForm() {
+				showLoading();
+				$("#submitForm").submit();
+			}
+			
+			function getFileName(path) {
+				return path.slice(path.lastIndexOf("\\") + 1);
+			}
+			
+			$(function() {
+				$("#pdf").change(function() {
+					$('#pdflabel').text(getFileName($(this).val()));
+					$("#pdf").change(function() {
+						$('#pdflabel').text(getFileName($(this).val()));
+					});
+				});
+				$("[category]").hide();
+			    $('#submitForm').ajaxForm(function(data) { 
+			    	hideLoading();
+		          	$("div[class*=Error]").hide();
+               		for(var i = 0; i < data.length; i++) {
+               			$("div." + data[i] + "Error").show();
+               		}
+               		if(data.length == 0) {
+               			location.href = submitUrl;              			
+               		}
+         		});			    
+			})
+	 	/* ]]> */
+	</script>
+
+	<script type="text/javascript" th:inline="javascript" th:if="${entry != null}">
+		/*<![CDATA[ */
+			var mainDesignCategory = [[${entry.mainDesignCategory}]]
+			var subDesignCategory = [[${entry.subDesignCategory}]]
+			var single = [[${entry.single} ? 1 : 0]]
+			var isPaid = [[${user.paid}]]
+			var isCloseForm = [[${@hkdaProperties.closeForm}]]
+			var isForceEnableEntryEdit = [[${@hkdaProperties.forceEnableEntryEdit}]]
+			$(function() {
+			    $("#mainDesignCategory").val(mainDesignCategory)
+			    initSelect($("#mainDesignCategory").parent().get(0));
+			    customSelectChange($("#mainDesignCategory"));
+	    		$("#subDesignCategory").val(subDesignCategory);
+			    initSelect($("#subDesignCategory").parent().get(0));
+			    
+			    $("#single").val(single);
+			    initSelect($("#single").parent().get(0));
+			    			    
+				if((isPaid || isCloseForm) && !isForceEnableEntryEdit) {
+					console.log($(".select-items").length);
+					$(".select-items").remove();					
+				}				
+			})
+		/* ]]> */
+	</script>
+</body>
+</html>

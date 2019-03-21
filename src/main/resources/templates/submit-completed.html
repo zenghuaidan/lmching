@@ -1,0 +1,85 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<div th:replace="~{head :: head(#{submitcomplete.browser_title})}"></div>
+<script type="text/javascript" th:inline="javascript">
+	var submitUrl = [[@{/submit}]]
+	
+	var packageLabelUrl = [[@{/docs/} + (${user.type.code == 'MAINLAND_CHINA'} ? 'PACKAGE LABEL FOR MAINLAND CHING ENTRANTS.pdf' : 'PACKAGE LABEL FOR HONG KONG AND OVERSEAS ENTRANTS.pdf')]]
+	//var guidelineDocUrl = [[@{/docs/} + ${#session.getAttribute('submissionGuideline')}]]
+	var guidelineDocUrl = [[@{/docs/} + 'Submission Guidelines PDF (' + ${#locale.country == 'US' ? 'Eng' : (#locale.country == 'CN' ? 'SC' : 'TC')} + ').pdf']]
+</script>
+<body id="body" class="en completed">
+	<div th:replace="~{header :: header}"></div>
+
+	<div class="full-pg pg-edge-tb">
+		<div class="title-col clearfix">
+			<h2 class="ti-col1" th:text="#{submitcomplete.title}">Submit</h2>
+			<div class="ti-col2" th:utext="${entryCountInfo}"></div>
+		</div>
+		<h3 th:utext="#{submitcomplete.description}"></h3>
+
+		<div class="pg-edge-tb">
+			<section class="co-section1">
+				<div class="btn-item i-gray" th:onclick="'javascript:window.open(\''+@{/paymentSummary/}+${user.id} + '\');'">
+					<div class="col2-Table item2col">
+						<div class="col2-TableBody">
+							<div class="col2-TableRow">
+								<div class="col2-TableCell"><div class="icon-btn"><i class="fa fa-print"></i></div></div>
+								<div class="col2-TableCell font-m" th:text="#{submitcomplete.print_payment}"></div>
+							</div>
+						</div>
+					</div>		
+				</div>
+				<div class="btn-item i-gray" th:onclick="'javascript:window.open(\''+@{/printLabel/}+${user.id} + '\');'">
+					<div class="col2-Table item2col">
+						<div class="col2-TableBody">
+							<div class="col2-TableRow">
+								<div class="col2-TableCell"><div class="icon-btn"><i class="fa fa-print"></i></div></div>
+								<div class="col2-TableCell font-m" th:text="#{submitcomplete.print_entry}"></div>
+							</div>
+						</div>
+					</div>		
+				</div>
+				<div class="btn-item i-gray" onclick="window.open(packageLabelUrl);">
+					<div class="col2-Table item2col">
+						<div class="col2-TableBody">
+							<div class="col2-TableRow">
+								<div class="col2-TableCell"><div class="icon-btn"><i class="fa fa-download"></i></div></div>
+								<div class="col2-TableCell font-m" th:text="#{submitcomplete.download_package_label}"></div>
+							</div>
+						</div>
+					</div>		
+				</div>
+				<div class="btn-item i-gray" onclick="window.open(guidelineDocUrl);">
+					<div class="col2-Table item2col">
+						<div class="col2-TableBody">
+							<div class="col2-TableRow">
+								<div class="col2-TableCell"><div class="icon-btn"><i class="fa fa-download"></i></div></div>
+								<div class="col2-TableCell font-m" th:text="#{submitcomplete.download_guideline}"></div>
+							</div>
+						</div>
+					</div>		
+				</div>
+			</section>
+
+			<section class="co-section2">				
+				<div class="btn-item i-orange no-hover-complete" th:each="entry : ${entries}">
+					<div class="col3-Table item3col">
+						<div class="col3-TableBody">
+							<div class="col3-TableRow">
+								<div class="col3-TableCell"></div>
+								<div class="col3-TableCell font-m" th:text="${entry.title}" th:onclick="'javascript:location.href=\''+@{/introduction/}+${entry.id} + '\';'"></div>
+								<div class="col3-TableCell font-m"><p class="price" th:text="${moneySymbol} + ' ' + (${entry.single} ? ${user.singleEntryFee} : ${user.seriesEntryFee})"></p></div><!-- for large device!-->
+							</div>
+						</div>
+					</div>	
+					<div class="price-m font-m" th:text="${moneySymbol} + ' ' + (${entry.single} ? ${user.singleEntryFee} : ${user.seriesEntryFee})"></div><!-- for small device!-->
+				</div>	
+				
+				<div class="state font-m" style="cursor:pointer" onclick="location.href=submitUrl;" th:text="#{submitcomplete.complete}"></div>
+			</section>
+
+		</div>
+	</div>
+</body>
+</html>

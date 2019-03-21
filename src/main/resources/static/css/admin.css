@@ -1,0 +1,86 @@
+
+	#body.admin 				{ background-color:#fff; color:#666; background-image:none;}
+    .admin header 				{ background-color:#ccc; padding:20px 0; transition: all 0.3s ease-out}
+    .admin header .h-col1 		{ width:75px; float:left;}
+    .admin header .h-col2 		{ width:calc(100% - 75px);  float:right; text-align:right; color:#666;}
+    .admin header .h-col2>h3 	{ margin-top:50px}
+
+
+    .admin-inside .info				{ margin-bottom:20px}
+	.admin-inside .info	.info-row 	{ margin-bottom:10px}
+	.admin-inside .info h3  		{ color:#666; display:inline-block; padding-right:10px}
+	.admin-inside .info h3 p 		{ color:#fd7f2b}
+
+    .admin-inside  table.table-info 	{ display:none;}
+    .admin-inside .page 			{ text-align:right;  width:300px}
+    .admin-inside .filter-col1 		{ width:90%; float:left;}
+    .admin-inside .filter-col2 		{ width:10%; float:left;}
+    .admin-inside .filter-col2 i 	{ padding:0 10px; line-height:normal; margin-top:30px}
+    .admin-inside .filter-col2 a i  		{ color:#666; cursor:pointer;}
+    .admin-inside .filter-col2 a i:hover    { color:#fd7f2b}
+
+
+    .admin-inside table.summary 		{ width:100%; border:0; font-size:14px}
+    .admin-inside table.summary i.arrow { font-size:18px; padding-right:10px}
+    .admin-inside table.summary tr th,
+    .admin-inside table.summary tr td  		{ vertical-align:top; text-align:left; padding:15px 20px}
+    .admin-inside table.summary tr th 		{ background-color:#ccc; font-weight:normal;}
+	.admin-inside table.summary tr td 		   { background-color:#ececec}
+    .admin-inside table.summary tr.selected td { background-color:#fef4ee}
+
+	.admin-inside table.summary tr.content td	{ background-color:#fff}
+	.admin-inside table.summary tr td:nth-child(4n)		{ width:50px}
+
+	.admin-inside .content-style 			{ width:calc(100% - 30px);  float:right;}
+	.admin-inside .content-style .co-row  	{ border-bottom:1px solid #ececec; padding-bottom:15px; padding-top:15px}
+	.admin-inside .content-style .co-row p 	{ font-weight:bold; line-height:2; }
+	.admin-inside .content-style .co-row a 	{ color:#666; cursor:pointer; transition: all 0.3s ease-out}
+	.admin-inside .content-style .co-row a:hover 		{ color:#fd7f2b;}
+	.admin-inside .content-style .co-row .field 		{ margin-bottom:20px}
+
+	.admin-inside table.detail 		 { width:100%; border:0;  line-height:2}
+	.admin-inside table.detail tr td { vertical-align:top; text-align:left; padding:0}
+	.admin-inside table.detail tr td:nth-child(odd) { font-weight:bold; width:175px}
+
+	.admin-inside .summary-btn 				{ display:inline-block; margin:20px 50px 20px 0}
+	.admin-inside .summary-btn .icon-btn 	{ display:inline-block; margin-right:10px}
+	.admin-inside .summary-btn .font-m 		{ display:inline-block;}
+	.admin-inside .summary-btn:hover		{ color:#fd7f2b; cursor:pointer; transition: all 0.3s ease-out}
+    /* ==========================================================================
+        Media
+    ============================================================================= */
+    @media only screen and (max-width:1200px) {
+    .admin-inside table.summary i.arrow 		{ font-size:16px; padding-right:10px}
+	.admin-inside table.summary tr td:nth-child(4n)		{ width:40px}
+
+    }
+
+    @media only screen and (max-width:1100px) {
+    .admin header .h-col1 		{ width:58px; float:left;}
+    .admin header .h-col2 		{ width:calc(100% - 58px);  float:right; text-align:right; color:#666;}
+    .admin header .h-col2>h3 	{ margin-top:40px}
+    .admin-inside .filter-col1 	{ width:100%; float:left;}
+    .admin-inside .filter-col2 		{ width:100%; float:left; margin-bottom:20px; margin-top:10px}
+    .admin-inside .filter-col2 i 	{ margin-top:0;}
+
+    }
+
+    @media only screen and (max-width:767px) {
+    .admin header 				{ padding:15px 0;}
+
+    .admin header .h-col1 		{ width:37px; float:left;}
+    .admin header .h-col2 		{ width:calc(100% - 37px);  float:right; text-align:right; color:#666;}
+    .admin header .h-col2>h3 	{ margin-top:20px}
+
+    .admin-inside table.summary 			{ font-size:9px; width:80%}
+    .admin-inside table.summary i.arrow 	{ font-size:9px; padding-right:2px}
+    .admin-inside .pg-edge-tb 				{ padding-top:30px}
+	.admin-inside .info	.info-row 			{ display:none;}
+    .admin-inside  table.table-info 		{ display:block; width:100%; border:0}
+    .admin-inside .info table tr td			{ vertical-align:top; text-align:left;}
+    .admin-inside .info table tr td:nth-child(odd)	{ width:80px; color:#fd7f2b}
+    .admin-inside .info table tr td:nth-child(even)	{ width:; color:#666}
+	.admin-inside .content-style 			{ width:100%;  float:left;}
+	.admin-inside table.detail tr td:nth-child(odd) { font-weight:bold; width:120px}
+    .co-row { font-size:12px}
+    }

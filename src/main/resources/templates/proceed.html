@@ -1,0 +1,301 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<div th:replace="~{head :: head(#{proceed.browser_title})}"></div>
+	<style>
+		.input__field--ruri:focus + .input__label--ruri .input__label-content--ruri,
+		.input--filled .input__label--ruri .input__label-content--ruri { font-size:110%;}
+	</style>
+
+	<script type="text/javascript" th:inline="javascript">		
+		var submitChequeUrl = [[@{/submitCheque}]]
+		var submitChequeSuccessMsg = [[#{proceed.payment.cheque_save_success}]]								
+		
+		var getPaypalCodeUrl = [[@{/getPaypalCode}]]
+				
+		var uploadPaymentSlipSuccessMsg = [[#{proceed.payment.wire_transfer_upload_slip_success}]]
+		
+		var paypalSuccessMsg = [[#{proceed.payment.paypal_success}]]
+		var paypalFailMsg = [[#{proceed.payment.paypal_fail}]]
+		
+		var submitCompleteUrl = [[@{/submitComplete}]]
+		var paypalUrl = [[${paypalUrl}]]
+		var paidForChinaUrl = [[@{/paidForChina}]]
+		var isPaid = [[${user.paid}]]
+		var chinaPaidConfirmMessage = [[#{proceed.payment.china_paid_confirm_message}]]
+		var paypalPaidConfirmMsg = [[#{proceed.payment.paypal_confirm}]]
+		var paymentConfirmMsg = [[#{proceed.payment.confirm}]]
+		/*<![CDATA[ */
+			function submitCheque() {
+				if($.trim($("#chequeNumber").val()) == '' || $.trim($("#chequeAccountName").val()) == '') truen;
+			    $("<div>" + paymentConfirmMsg + "</div>").dialog({
+			        resizable: false,
+			        height: "auto",
+			        width: 400,
+			        modal: true,
+			        buttons: {
+		        	  [[#{Yes}]]: function() {
+				            $( this ).dialog( "close" );
+				        	showLoading();
+				            $.post(submitChequeUrl, $("#chequeForm").serialize(), function (data) {
+				            	hideLoading();
+				            	$("<div>" + submitChequeSuccessMsg + "</div>").dialog(
+			       					{
+			       					  	close: function( event, ui ) {submitComplete();}
+			       					}	
+			           			);	            	
+				            }, "json");
+			          },
+			          [[#{No}]]: function() {
+			            $( this ).dialog( "close" );
+			          }
+			        }
+			      });					
+			}
+		
+			function proceedPaymentForChina() {
+				$("<div>" + chinaPaidConfirmMessage + "</div>").dialog({
+			        resizable: false,
+			        height: "auto",
+			        width: 400,
+			        modal: true,
+			        buttons: {
+			          [[#{Yes}]]: function() {
+			            $( this ).dialog( "close" );
+			        	showLoading();
+			        	$.get(paidForChinaUrl, function (data) {
+			            	hideLoading();
+			            	submitComplete();
+			            }, "json");
+			          },
+			          [[#{No}]]: function() {
+			            $( this ).dialog( "close" );
+			          }
+			        }
+			      });
+			}
+		
+			function uploadPaymentSlip() {	
+				if($.trim($("#uploadPayment").val()) == '') return;
+			    $("<div>" + paymentConfirmMsg + "</div>").dialog({
+			        resizable: false,
+			        height: "auto",
+			        width: 400,
+			        modal: true,
+			        buttons: {
+			          [[#{Yes}]]: function() {
+			            $( this ).dialog( "close" );
+			        	showLoading();
+						$('#uploadPaymentSlipForm').submit();
+			          },
+			          [[#{No}]]: function() {
+			            $( this ).dialog( "close" );
+			          }
+			        }
+			      });								
+			}
+			
+			function paySuccess() {
+				$("<div>" + paypalSuccessMsg + "</div>").dialog(
+					{
+   					  	close: function( event, ui ) {$("#paidStatus").show();submitComplete();}
+   					}
+				);				
+			}
+			
+			function payFail() {
+				$("<div>" + paypalFailMsg + "</div>").dialog();
+			}
+			
+			function submitComplete() {
+				location.href = submitCompleteUrl;
+			}
+			
+			function doPaypal() {
+			    $("<div>" + paypalPaidConfirmMsg + "</div>").dialog({
+			        resizable: false,
+			        height: "auto",
+			        width: 400,
+			        modal: true,
+			        buttons: {
+			          [[#{Yes}]]: function() {
+			            	$( this ).dialog( "close" );
+			        	  	$.get(getPaypalCodeUrl, function (data) {				            																	
+								var dlform = document.createElement('form');
+								dlform.style = "display:none;";
+								dlform.method = 'post';
+								dlform.action = paypalUrl;								
+								
+								for(name in data) {
+									var hdnFilePath = document.createElement('input');
+									hdnFilePath.type = 'hidden';
+									hdnFilePath.name = name;
+									hdnFilePath.value = data[name];
+									dlform.appendChild(hdnFilePath);									
+								}
+								document.body.appendChild(dlform);
+								dlform.submit();
+								document.body.removeChild(dlform);
+								
+				            }, "json");
+			          },
+			          [[#{No}]]: function() {
+			            $( this ).dialog( "close" );
+			          }
+			        }
+			      });	            
+			}
+			function getFileName(path) {
+				return path.slice(path.lastIndexOf("\\") + 1);
+			}
+			$(function() {
+				if(isPaid) {
+					submitComplete();
+				}
+				$("#uploadPayment").change(function() {
+					$('#uploadPaymentlabel').text(getFileName($(this).val()));
+					$("#uploadPayment").change(function() {
+						
+						$('#uploadPaymentlabel').text(($(this).val()));						
+					});
+				});	
+			    $('#uploadPaymentSlipForm').ajaxForm(function(data) { 	
+			    	hideLoading();
+			    	if(data) {
+			    		$("<div>" + uploadPaymentSlipSuccessMsg + "</div>").dialog(
+							{
+		   					  	close: function( event, ui ) {submitComplete();}
+		   					}
+	    				);			    		
+			    	}		          	
+         		});	
+			})
+	 	/* ]]> */
+	</script>
+
+<body id="body" class="en payment">
+	<div th:replace="~{loading :: loading}"></div>
+	<div th:replace="~{header :: header}"></div>
+
+	<div class="full-pg pg-edge-tb">
+		<i onclick="javascript:history.back(-1)" class="fa fa-angle-left" style="font-size: 60px;text-align: center;color: #fff;line-height: normal;width: 60px;height: 60px;background-color: #333;-webkit-border-radius: 50px;-moz-border-radius: 50px;border-radius: 50px;transition: all 0.3s ease-out;letter-spacing: 5px;cursor: pointer;"></i>
+		
+		<h2 th:text="#{proceed.title}"></h2>
+
+		<h3 th:utext="#{proceed.description}"></h3>
+
+		<div class="pg-edge-tb">
+			<section class="su-section1">				
+				
+				<div th:if="${user.type.code == 'MAINLAND_CHINA' and not @hkdaProperties.closeForm}" class="btn-item i-gray no-hover">
+					<div class="col2-Table item2col">
+						<div class="col2-TableBody">
+							<div class="col2-TableRow">
+								<div class="col2-TableCell"><div class="icon-btn"><i class="fa fa-exchange"></i></div></div>
+								<div class="col2-TableCell font-m">
+									<div class="tranfer-intro">
+										<div th:text="#{proceed.payment.china_paid_title}"></div>
+										<div class="tranfer-info">
+											<div class="tr-pos" th:utext="#{proceed.payment.china_paid_instruction}"></div>
+											<div class="tr-pos"><img th:src="@{/images/wechat.png}" /></div>											
+										</div>
+									</div>									
+							        <br/>								        
+									<div class="action-blk save">
+							        	<a class="button" href="javascript:proceedPaymentForChina()"><span class="g-btn" th:text="#{proceed.payment.china_paid}"></span></a>
+							        </div>
+								</div>	
+							</div>
+						</div>
+					</div>		
+				</div>
+				
+				<div class="btn-item i-gray" onclick="doPaypal();" th:if="${user.type.code != 'MAINLAND_CHINA' and not @hkdaProperties.closeForm}">
+					<div class="col2-Table item2col">
+						<div class="col2-TableBody">
+							<div class="col2-TableRow">
+								<div class="col2-TableCell"><div class="icon-btn"><i class="fa fa-paypal"></i></div></div>
+								<div class="col2-TableCell font-m" th:utext="#{proceed.payment.paypal_title}"></div>
+								<h2 id="paidStatus" th:hidden="${not (user.usePaypal && user.paid)}" th:text="#{proceed.payment.paypal_paid}"></h2>
+							</div>
+						</div>
+					</div>		
+				</div>
+				<div class="btn-item i-gray no-hover" th:if="${user.type.code != 'MAINLAND_CHINA' and not @hkdaProperties.closeForm}">
+					<div class="col2-Table item2col">
+						<div class="col2-TableBody">
+							<div class="col2-TableRow">
+								<div class="col2-TableCell"><div class="icon-btn"><i class="fa fa-money"></i></div></div>
+								<div class="col2-TableCell font-m">
+									<div class="cheque-intro" >
+										<div th:utext="#{proceed.payment.cheque_title}"></div>
+										<div class="font-normal txt-666" th:utext="#{proceed.payment.cheque_sub_title}"></div>
+									</div>
+
+									<form autocomplete="off" id="chequeForm">
+								        <div class="cheque-field">
+								            <span class="input input--ruri">
+								                <input onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')" class="input__field input__field--ruri" type="number" id="chequeNumber" name="chequeNumber" th:value="${user.chequeNumber}" />
+								                <label class="input__label input__label--ruri" for="chequeNumber">
+								                    <span class="input__label-content input__label-content--ruri" th:text="#{proceed.payment.cheque_number}"></span>
+								               </label>
+								            </span>
+								           	<div class="error" th:text="#{proceed.payment.cheque_number_error}"></div>
+								        </div>
+								        <div class="cheque-field">
+								            <span class="input input--ruri">
+								                <input class="input__field input__field--ruri" type="text" id="chequeAccountName" name="chequeAccountName" th:value="${user.chequeAccountName}" />
+								                <label class="input__label input__label--ruri" for="chequeAccountName">
+								                    <span class="input__label-content input__label-content--ruri" th:text="#{proceed.payment.cheque_account_name}"></span>
+								               </label>
+								            </span>
+								           	<div class="error" th:text="#{proceed.payment.cheque_account_name_error}"></div>
+								        </div>
+										<div class="action-blk save">
+								        	<a class="button" href="javascript:submitCheque()"><span class="g-btn" th:text="#{proceed.payment.cheque_saveBtn}"></span></a>
+								        </div>
+									</form>
+								</div>	
+							</div>
+						</div>
+					</div>		
+				</div>
+				<form th:if="${user.type.code != 'MAINLAND_CHINA' and not @hkdaProperties.closeForm}" autocomplete="off" id="uploadPaymentSlipForm" th:action="@{/uploadPaymentSlip}" enctype="multipart/form-data" method="post">
+					<div class="btn-item i-gray no-hover">
+						<div class="col2-Table item2col">
+							<div class="col2-TableBody">
+								<div class="col2-TableRow">
+									<div class="col2-TableCell"><div class="icon-btn"><i class="fa fa-exchange"></i></div></div>
+									<div class="col2-TableCell font-m">
+										<div class="tranfer-intro">
+											<div th:text="#{proceed.payment.wire_transfer_title}"></div>
+											<div class="tranfer-info">
+												<div class="tr-pos" th:utext="#{proceed.payment.wire_transfer_bank}"></div>
+												<div class="tr-pos" th:utext="#{proceed.payment.wire_transfer_bank_address}"></div>
+											</div>
+										</div>
+										<input type="file" id="uploadPayment" name="uploadPayment" accept="image/jpeg, image/png, image/jpg" style="display:none;" />
+										<div class="action-blk upload">
+								        	<a class="button" href="javascript:$('#uploadPayment').click();">
+								        		<span class="g-btn"><i class="fa fa-upload"></i>[[#{proceed.payment.wire_transfer_upload_slip_btn}]]</span>
+							        		</a>
+							        		<label style="color:#fd7f2b;" id="uploadPaymentlabel" class="font-m">[[${user.oriPaymentSlip}]]</label>
+								        </div>
+								        <br/>								        
+										<div class="action-blk save">
+								        	<a class="button" href="javascript:uploadPaymentSlip()"><span class="g-btn" th:text="#{proceed.payment.wire_transfer_saveBtn}"></span></a>
+								        </div>
+									</div>	
+								</div>
+							</div>
+						</div>		
+					</div>
+				</form>
+
+			</section>
+
+		</div>
+	</div>	
+	<script th:src="@{/script/classie.js}"></script>
+	<script th:src="@{/script/custom-select.js}"></script>
+</body>
+</html>

@@ -1,0 +1,66 @@
+	.admin-inside .filter { margin-top:60px}
+
+	/* Select box common ()
+	-------------------------*/
+	.select-d { display:block;}
+	.select-m { display:none}
+	.sep 				   		 { margin-bottom:30px}
+	.select .custom-select 		 { width:350px;}
+	.select .custom-select.small { width:220px;}
+
+	.select .custom-select p { font-size:16px; line-height:normal; color:#005dab; margin-bottom:5px}
+
+
+	/* Select box 
+	-------------------------*/
+	.custom-select 			{ position:relative; /* font-family: Arial;*/}
+	.custom-select select 	{ display: none; } 
+	.select-selected 		{ background-color:#fff;}
+	.select-selected:after  { position:absolute; content: ""; top:20px; right:15px; width:0; height:0;
+	  						  border:6px solid transparent;
+	  						  border-color: #666 transparent transparent transparent;}
+	
+	.select-selected.select-arrow-active:after { top:15px;
+						border-color: transparent transparent #666 transparent; }
+	
+	.select-items div,.select-selected { color:#fff; line-height:1.4; font-size:16px;
+	 						 			 padding:12px 16px;
+	  								border:1px solid transparent;
+	  						  border-color: transparent transparent rgba(0, 0, 0, 0.1) transparent;
+									cursor: pointer;
+	  						   user-select: none; }
+
+	.select-selected 	{ color:#666}
+	.select-items 		{ position:absolute; background-color:#333; color:#fff;
+	  					  top:100%; left:0; right:0; z-index:99;}
+	.select-hide 		{ display:none;}
+	.select-items div:hover, .same-as-selected { background-color: rgba(0, 0, 0, 0.1);}
+
+
+	/* ==========================================================================
+	  = Media Style
+	============================================================================= */	
+	@media only screen and (max-width: 1250px) {
+	.select .custom-select 		 { width:250px;}
+	.select .custom-select.small { width:220px;}
+	.sep 				   		 { margin-bottom:10px}
+	}
+
+	@media only screen and (min-device-width : 768px) and (max-device-width : 1024px) and (orientation : landscape)  { 
+	.select .custom-select 		 { width:360px;}
+	.select .custom-select.small { width:220px;}
+	}
+
+	@media only screen and (min-device-width : 768px) and (max-device-width : 1024px) and (orientation : portrait) { 
+	.select .custom-select 		 { width:260px;}
+	.select .custom-select.small { width:170px;}
+	}
+
+	@media only screen and (max-width:767px) {
+	.select-d { display:none}
+	.select-m { display:block; margin-bottom:20px}
+
+	.select-m select { width:100%; padding:5px 10px; margin-bottom:5px}
+	.field { font-size:12px;}
+
+	}

@@ -1,0 +1,14 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<body>
+		<div th:text="${year}"></div>
+		<select>
+	    	<option th:each="year : ${years}" th:value="${year}" th:text="${year}" ></option>
+        </select>
+        <ul>
+	        <li th:each="mainCategory,stat : ${mainCategoryImageMap}">
+	        	<span th:text="${mainCategory}"></span> ==> <span th:text="${mainCategoryMap.get(mainCategory)}"></span>			
+			</li>		
+        </ul>
+	</body>
+</html>
