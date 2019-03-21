@@ -6,6 +6,7 @@ import org.springframework.social.facebook.connect.FacebookAdapter;
 
 //https://segmentfault.com/a/1190000015281172
 //https://developers.facebook.com/docs/facebook-login/manually-build-a-login-flow
+//https://www.baeldung.com/facebook-authentication-with-spring-security-and-social
 
 public class CustomFacebookConnectionFactory extends OAuth2ConnectionFactory<Facebook> {
 	public CustomFacebookConnectionFactory(String appId, String appSecret, String apiVersion) {
