@@ -1,6 +1,8 @@
 package com.lmching.mall.facebook;
 
 
+import javax.sql.DataSource;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -16,9 +18,9 @@ import org.springframework.social.config.annotation.SocialConfigurerAdapter;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionFactoryLocator;
 import org.springframework.social.connect.ConnectionRepository;
+import org.springframework.social.connect.ConnectionSignUp;
 import org.springframework.social.connect.UsersConnectionRepository;
 import org.springframework.social.connect.jdbc.JdbcUsersConnectionRepository;
-import org.springframework.social.connect.mem.InMemoryUsersConnectionRepository;
 import org.springframework.social.connect.web.ConnectController;
 import org.springframework.social.facebook.api.Facebook;
 
@@ -27,7 +29,13 @@ import org.springframework.social.facebook.api.Facebook;
 @EnableConfigurationProperties(EnhancedFacebookProperties.class)
 public class FacebookConfiguration extends SocialConfigurerAdapter {
 	@Autowired
-	private EnhancedFacebookProperties properties;
+	public EnhancedFacebookProperties properties;
+	
+	@Autowired
+	public ConnectionSignUp connectionSignUp;
+	
+	@Autowired
+	DataSource dataSource;
 	
 	@Override
 	public void addConnectionFactories(ConnectionFactoryConfigurer connectionFactoryConfigurer, Environment environment) {
@@ -39,10 +47,8 @@ public class FacebookConfiguration extends SocialConfigurerAdapter {
 	public UsersConnectionRepository getUsersConnectionRepository(ConnectionFactoryLocator connectionFactoryLocator) {
 		JdbcUsersConnectionRepository repository = new JdbcUsersConnectionRepository(dataSource,
 				connectionFactoryLocator, Encryptors.noOpText());
-		repository.setTablePrefix("imooc_");
-		if(connectionSignUp != null) {
-			repository.setConnectionSignUp(connectionSignUp);
-		}
+//		repository.setTablePrefix("imooc_");
+		repository.setConnectionSignUp(connectionSignUp);		
 		return repository;
 	}
 

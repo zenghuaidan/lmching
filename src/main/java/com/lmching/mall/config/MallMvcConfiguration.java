@@ -49,14 +49,25 @@ public class MallMvcConfiguration implements WebMvcConfigurer {
 		configurer.setUseSuffixPatternMatch(false);
 	}
 
-		@Bean
-		public static PropertySourcesPlaceholderConfigurer properties() {
-			PropertySourcesPlaceholderConfigurer configurer = new PropertySourcesPlaceholderConfigurer();
-			YamlPropertiesFactoryBean yaml = new YamlPropertiesFactoryBean();
-//			yaml.setResources(new FileSystemResource("config.yml"));//File引入
-			yaml.setResources(new ClassPathResource("country.yml"));//class引入
-			configurer.setProperties(yaml.getObject());
-			return configurer;
-		}
+	@Bean
+	public static PropertySourcesPlaceholderConfigurer properties() {
+		PropertySourcesPlaceholderConfigurer configurer = new PropertySourcesPlaceholderConfigurer();
+		YamlPropertiesFactoryBean yaml = new YamlPropertiesFactoryBean();
+//		yaml.setResources(new FileSystemResource("config.yml"));//File引入
+		yaml.setResources(new ClassPathResource("country.yml"));//class引入
+		configurer.setProperties(yaml.getObject());
+		return configurer;
+	}
+	
+//    private final long MAX_AGE_SECS = 3600;
+//    @Override
+//    public void addCorsMappings(CorsRegistry registry) {
+//        registry.addMapping("/**")
+//        .allowedOrigins("*")
+//        .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
+//        .allowedHeaders("*")
+//        .allowCredentials(true)
+//        .maxAge(MAX_AGE_SECS);
+//    }
 
 }

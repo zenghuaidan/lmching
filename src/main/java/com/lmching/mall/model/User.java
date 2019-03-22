@@ -9,22 +9,27 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
+import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.NotBlank;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-@Table(name = "User")
+@Table(name = "User", uniqueConstraints = {
+        @UniqueConstraint(columnNames = "email")
+})
 public class User implements Serializable {
 	
 	private static final long serialVersionUID = -5051085506032468813L;
@@ -49,6 +54,10 @@ public class User implements Serializable {
 	@NotNull
 	private UserType type;
 	
+    private AuthProvider provider;
+    
+    private String providerId;
+	
 	private int numFail;
 		
 	private Date lastFailTime;
@@ -63,8 +72,7 @@ public class User implements Serializable {
 	private Date updateTime;
 	
 	@Id
-	@GeneratedValue(generator = "incrementGenerator") 
-	@GenericGenerator(name = "incrementGenerator", strategy = "increment")
+	@GeneratedValue(strategy  = GenerationType.IDENTITY) 
 	public Long getId() {
 		return id;
 	}
@@ -73,6 +81,7 @@ public class User implements Serializable {
 		this.id = id;
 	}
 
+	@JsonIgnore
 	@Column(nullable=false)
 	public String getPassword() {
 		return password;
@@ -131,6 +140,24 @@ public class User implements Serializable {
 
 	public void setType(UserType type) {
 		this.type = type;
+	}
+	
+    @NotNull
+    @Enumerated(EnumType.STRING)
+	public AuthProvider getProvider() {
+		return provider;
+	}
+
+	public void setProvider(AuthProvider provider) {
+		this.provider = provider;
+	}
+
+	public String getProviderId() {
+		return providerId;
+	}
+
+	public void setProviderId(String providerId) {
+		this.providerId = providerId;
 	}
 
 	@Column(nullable=false)

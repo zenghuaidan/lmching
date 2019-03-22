@@ -1,10 +1,12 @@
 package com.lmching.mall.facebook;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 @Component
-@ConfigurationProperties(prefix = "facebook")
+@ConfigurationProperties(prefix = "lmching.facebook")
+@EnableConfigurationProperties
 public class EnhancedFacebookProperties {
 	private String appId;
 	private String appSecret;
