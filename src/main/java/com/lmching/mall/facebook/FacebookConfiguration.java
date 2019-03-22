@@ -20,15 +20,13 @@ import org.springframework.social.connect.ConnectionRepository;
 import org.springframework.social.connect.ConnectionSignUp;
 import org.springframework.social.connect.UsersConnectionRepository;
 import org.springframework.social.connect.jdbc.JdbcUsersConnectionRepository;
-import org.springframework.social.connect.web.ConnectController;
-import org.springframework.social.connect.web.ProviderSignInController;
 import org.springframework.social.facebook.api.Facebook;
 
 @Configuration
 @EnableSocial
 public class FacebookConfiguration extends SocialConfigurerAdapter {
 	@Autowired
-	public EnhancedFacebookProperties properties;
+	public FacebookProperties properties;
 	
 	@Autowired
 	public ConnectionSignUp connectionSignUp;
@@ -36,9 +34,21 @@ public class FacebookConfiguration extends SocialConfigurerAdapter {
 	@Autowired
 	DataSource dataSource;
 	
+//	@Override
+//	public UserIdSource getUserIdSource() {
+//		return new UserIdSource() {
+//			
+//			@Override
+//			public String getUserId() {
+//				// TODO Auto-generated method stub
+//				return null;
+//			}
+//		};
+//	}
+	
 	@Override
 	public void addConnectionFactories(ConnectionFactoryConfigurer connectionFactoryConfigurer, Environment environment) {
-		connectionFactoryConfigurer.addConnectionFactory(new CustomFacebookConnectionFactory(this.properties.getAppId(), this.properties.getAppSecret(),
+		connectionFactoryConfigurer.addConnectionFactory(new FacebookConnectionFactory(this.properties.getAppId(), this.properties.getAppSecret(),
 				this.properties.getApiVersion()));
 	}
 	
@@ -46,7 +56,6 @@ public class FacebookConfiguration extends SocialConfigurerAdapter {
 	public UsersConnectionRepository getUsersConnectionRepository(ConnectionFactoryLocator connectionFactoryLocator) {
 		JdbcUsersConnectionRepository repository = new JdbcUsersConnectionRepository(dataSource,
 				connectionFactoryLocator, Encryptors.noOpText());
-//		repository.setTablePrefix("imooc_");
 		repository.setConnectionSignUp(connectionSignUp);		
 		return repository;
 	}
@@ -60,23 +69,4 @@ public class FacebookConfiguration extends SocialConfigurerAdapter {
 		return connection != null ? connection.getApi() : null;
 	}
 
-	// 当我们使用spring social的时候，我们会使用ConnectController 类来处理重定向的问题。默认情况下，spring
-	// social会根据request URL ，自动构造redirect
-	// URL，因为这个应用程序可能藏在代理下，provider没办法识别url,因此，我们在这里手动输入
-	@Bean
-	public ConnectController connectController(ConnectionFactoryLocator factoryLocator,
-			ConnectionRepository repository) {
-		ConnectController controller = new ConnectController(factoryLocator, repository);
-		controller.setApplicationUrl("https://localhost:8080");
-		return controller;
-	}
-	
-    @Bean
-    public ProviderSignInController providerSignInController(ConnectionFactoryLocator connectionFactoryLocator) {        
-        UsersConnectionRepository usersConnectionRepository = getUsersConnectionRepository(connectionFactoryLocator);
-        return new ProviderSignInController(
-          connectionFactoryLocator, 
-          usersConnectionRepository, 
-          new FacebookSignInAdapter());
-    }
 }

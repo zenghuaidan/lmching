@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 @Component
 @ConfigurationProperties(prefix = "lmching.facebook")
 @EnableConfigurationProperties
-public class EnhancedFacebookProperties {
+public class FacebookProperties {
 	private String appId;
 	private String appSecret;
 	private String apiVersion;

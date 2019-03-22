@@ -5,11 +5,11 @@ import org.springframework.social.facebook.api.impl.FacebookTemplate;
 import org.springframework.social.oauth2.AbstractOAuth2ServiceProvider;
 import org.springframework.social.oauth2.OAuth2Template;
 
-public class CustomFacebookServiceProvider extends AbstractOAuth2ServiceProvider<Facebook> {
+public class FacebookServiceProvider extends AbstractOAuth2ServiceProvider<Facebook> {
 	private String appNamespace;
 	private String apiVersion;
 
-	public CustomFacebookServiceProvider(String appId, String appSecret, String apiVersion) {
+	public FacebookServiceProvider(String appId, String appSecret, String apiVersion) {
 		super(getOAuth2Template(appId, appSecret, apiVersion));
 		this.apiVersion = apiVersion;
 	}
