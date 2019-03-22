@@ -27,10 +27,10 @@ public interface UserRepository extends PagingAndSortingRepository<User, Long> {
     @Query("update User u set u.password = ?1, u.numFail=0 where u.resetPasswordCode = ?2")
 	int updatePasswordByResetPasswordCode(String password, String resetPasswordCode);
     
-    @Query("select count(1) from User u where u.admin = 0")
+    @Query("select count(1) from User")
   	int userCount();                    
     
-    @Query(value = "select u from User u where u.admin = 0",
-    		countQuery = "select count(1) from User u where u.admin = 0")
+    @Query(value = "select u from User u",
+    		countQuery = "select count(1) from User u")
     Page<User> findAll(Pageable pageable);
 }

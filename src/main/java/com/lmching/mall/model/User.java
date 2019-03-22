@@ -15,21 +15,18 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
-import javax.persistence.UniqueConstraint;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
+import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotBlank;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-@Table(name = "User", uniqueConstraints = {
-        @UniqueConstraint(columnNames = "email")
-})
+@Table(name = "User")
 public class User implements Serializable {
 	
 	private static final long serialVersionUID = -5051085506032468813L;
@@ -39,7 +36,6 @@ public class User implements Serializable {
 	private String name;	
 	
 	@Email
-	@NotBlank
 	private String email;
 	
 	@Length(min=6)
@@ -48,15 +44,10 @@ public class User implements Serializable {
 	@Length(min=6)
 	private String verifyPassword;
 	
-	@NotBlank
 	private String phone;
 	
 	@NotNull
-	private UserType type;
-	
-    private AuthProvider provider;
-    
-    private String providerId;
+	private UserType type;	    
 	
 	private int numFail;
 		
@@ -82,7 +73,7 @@ public class User implements Serializable {
 	}
 
 	@JsonIgnore
-	@Column(nullable=false)
+	@Column(nullable=true)
 	public String getPassword() {
 		return password;
 	}
@@ -105,7 +96,7 @@ public class User implements Serializable {
 		this.verifyPassword = verifyPassword;
 	}
 
-	@Column(nullable=false, unique=true)
+	@Column(nullable=true, unique=true)
 	public String getEmail() {
 		return email;
 	}
@@ -123,7 +114,7 @@ public class User implements Serializable {
 		this.name = name;
 	}
 
-	@Column(nullable=false)
+	@Column(nullable=true)
 	public String getPhone() {
 		return phone;
 	}
@@ -140,24 +131,6 @@ public class User implements Serializable {
 
 	public void setType(UserType type) {
 		this.type = type;
-	}
-	
-    @NotNull
-    @Enumerated(EnumType.STRING)
-	public AuthProvider getProvider() {
-		return provider;
-	}
-
-	public void setProvider(AuthProvider provider) {
-		this.provider = provider;
-	}
-
-	public String getProviderId() {
-		return providerId;
-	}
-
-	public void setProviderId(String providerId) {
-		this.providerId = providerId;
 	}
 
 	@Column(nullable=false)

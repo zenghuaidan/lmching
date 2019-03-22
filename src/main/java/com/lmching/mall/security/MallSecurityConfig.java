@@ -190,7 +190,7 @@ public class MallSecurityConfig extends WebSecurityConfigurerAdapter {
 						"/index",
 						"/category",
 						"/list",
-						"/result")
+						"/result","/","/signin/**","/signup/**")
 					.permitAll()					
 				.antMatchers("/admin", "confirmWithPayaplPaid/**", "/confirmPaid/**", "/resetPaypalStatus/**", "/resetPaid/**", "/report", "/uploadImages", "/uploadAwards", "/downloadAwards")
 					.hasAnyAuthority("ADMIN")

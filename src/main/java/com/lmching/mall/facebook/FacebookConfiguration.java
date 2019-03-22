@@ -5,7 +5,6 @@ import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
@@ -22,11 +21,11 @@ import org.springframework.social.connect.ConnectionSignUp;
 import org.springframework.social.connect.UsersConnectionRepository;
 import org.springframework.social.connect.jdbc.JdbcUsersConnectionRepository;
 import org.springframework.social.connect.web.ConnectController;
+import org.springframework.social.connect.web.ProviderSignInController;
 import org.springframework.social.facebook.api.Facebook;
 
 @Configuration
 @EnableSocial
-@EnableConfigurationProperties(EnhancedFacebookProperties.class)
 public class FacebookConfiguration extends SocialConfigurerAdapter {
 	@Autowired
 	public EnhancedFacebookProperties properties;
@@ -71,4 +70,13 @@ public class FacebookConfiguration extends SocialConfigurerAdapter {
 		controller.setApplicationUrl("https://localhost:8080");
 		return controller;
 	}
+	
+    @Bean
+    public ProviderSignInController providerSignInController(ConnectionFactoryLocator connectionFactoryLocator) {        
+        UsersConnectionRepository usersConnectionRepository = getUsersConnectionRepository(connectionFactoryLocator);
+        return new ProviderSignInController(
+          connectionFactoryLocator, 
+          usersConnectionRepository, 
+          new FacebookSignInAdapter());
+    }
 }
