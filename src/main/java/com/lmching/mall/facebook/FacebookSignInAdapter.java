@@ -20,7 +20,7 @@ public class FacebookSignInAdapter implements SignInAdapter {
          
         SecurityContextHolder.getContext().setAuthentication(
           new UsernamePasswordAuthenticationToken(
-          connection.getDisplayName(), null, 
+        		  localUserId, null, 
           Arrays.asList(new SimpleGrantedAuthority("FACEBOOK_USER"))));
          
         return null;
