@@ -25,6 +25,7 @@ import org.hibernate.validator.constraints.NotBlank;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+
 @Entity
 @Table(name = "User")
 public class User implements Serializable {
@@ -58,6 +59,8 @@ public class User implements Serializable {
 	private String resetPasswordCode;	
 	
 	private boolean active = false;
+	
+//	private List<Address> addresses;
 	
 	private Date createTime = new Date();
 	private Date updateTime;
@@ -169,6 +172,15 @@ public class User implements Serializable {
 	public void setLastFailTime(Date lastFailTime) {
 		this.lastFailTime = lastFailTime;
 	}
+
+//	@OneToMany(mappedBy="user")
+//	public List<Address> getAddresses() {
+//		return addresses;
+//	}
+//
+//	public void setAddresses(List<Address> addresses) {
+//		this.addresses = addresses;
+//	}
 
 	@Temporal(TemporalType.TIMESTAMP)
 	// The column type in mysql will be DATETIME, should use columnDefinition to limit it to TIMESTAMP to make it auto updatable
