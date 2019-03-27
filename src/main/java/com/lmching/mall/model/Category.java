@@ -5,38 +5,32 @@ import java.io.Serializable;
 import java.util.Locale;
 
 import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.Table;
 
-@Entity
 @Table(name = "Category")
 public class Category implements Serializable {
 	
 	private static final long serialVersionUID = -5051085506032468813L;
 
-	private Long id;
+	private Long pid;
 	
 	private String type;
 	
 	private String nameEN;	
 	
 	private String nameTC;
-	
-	private Long pid;
+		
+	private Integer order;
 	
 	private boolean active = true;
 		
-	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	public Long getId() {
-		return id;
+	@Column(nullable=false)
+	public Long getPid() {
+		return pid;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	public void setPid(Long pid) {
+		this.pid = pid;
 	}
 
 	@Column(nullable=false)
@@ -64,16 +58,15 @@ public class Category implements Serializable {
 	public void setNameTC(String nameTC) {
 		this.nameTC = nameTC;
 	}
-
-	@Column(nullable=false)
-	public Long getPid() {
-		return pid;
-	}
-
-	public void setPid(Long pid) {
-		this.pid = pid;
-	}
 	
+	public int getOrder() {
+		return order;
+	}
+
+	public void setOrder(int order) {
+		this.order = order;
+	}
+
 	@Column(nullable=false)
 	public boolean isActive() {
 		return active;

@@ -1,38 +1,31 @@
 package com.lmching.mall.model;
 
 
-import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
-import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
-import org.hibernate.annotations.Generated;
-import org.hibernate.annotations.GenerationTime;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.lmching.mall.model.assist.Pojo;
+import com.lmching.mall.model.assist.UserType;
 
 
-@Entity
 @Table(name = "User")
-public class User implements Serializable {
+public class User extends Pojo {
 	
-	private static final long serialVersionUID = -5051085506032468813L;
-	private Long id;	
-	
+	private static final long serialVersionUID = 3316832358771468651L;
+
 	@NotBlank
 	private String name;	
 	
@@ -61,19 +54,6 @@ public class User implements Serializable {
 	private boolean active = false;
 	
 //	private List<Address> addresses;
-	
-	private Date createTime = new Date();
-	private Date updateTime;
-	
-	@Id
-	@GeneratedValue(strategy  = GenerationType.IDENTITY) 
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
 
 	@JsonIgnore
 	@Column(nullable=true)
@@ -153,16 +133,6 @@ public class User implements Serializable {
 	public void setNumFail(int numFail) {
 		this.numFail = numFail;
 	}
-
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(nullable = false, updatable = false)
-	public Date getCreateTime() {
-		return createTime;
-	}
-
-	public void setCreateTime(Date createTime) {
-		this.createTime = createTime;
-	}
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	public Date getLastFailTime() {
@@ -181,18 +151,6 @@ public class User implements Serializable {
 //	public void setAddresses(List<Address> addresses) {
 //		this.addresses = addresses;
 //	}
-
-	@Temporal(TemporalType.TIMESTAMP)
-	// The column type in mysql will be DATETIME, should use columnDefinition to limit it to TIMESTAMP to make it auto updatable
-	@Column(nullable=false, insertable = false, updatable = false, columnDefinition="TIMESTAMP")  
-	@Generated(GenerationTime.ALWAYS)
-	public Date getUpdateTime() {
-		return updateTime;
-	}
-
-	public void setUpdateTime(Date updateTime) {
-		this.updateTime = updateTime;
-	}	
 	
 	@Transient
 	public boolean isLock() {		

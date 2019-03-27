@@ -7,7 +7,7 @@ import org.springframework.social.facebook.api.Facebook;
 import org.springframework.stereotype.Service;
 
 import com.lmching.mall.model.User;
-import com.lmching.mall.model.UserType;
+import com.lmching.mall.model.assist.UserType;
 import com.lmching.mall.repository.UserRepository;
 
 @Service

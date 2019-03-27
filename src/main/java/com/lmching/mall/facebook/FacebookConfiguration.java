@@ -61,7 +61,6 @@ public class FacebookConfiguration extends SocialConfigurerAdapter {
 		return repository;
 	}
 
-	// 提供Facebook 实例
 	@Bean
 	@Scope(value = "request", proxyMode = ScopedProxyMode.INTERFACES)
 	public Facebook facebook(ConnectionRepository repository) {
