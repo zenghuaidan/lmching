@@ -62,7 +62,7 @@ public class MallSecurityConfig extends WebSecurityConfigurerAdapter {
 				.and().and()
 				.csrf().disable();
 		http.logout()
-			.logoutUrl("/login")
+			.logoutUrl("/logout")
 			.logoutSuccessUrl("/login")
 			.and().csrf().disable();
 		
