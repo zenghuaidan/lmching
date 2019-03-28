@@ -1,12 +1,19 @@
-package com.mmall.pojo;
+package com.lmching.mall.model;
 
 import java.math.BigDecimal;
-import java.util.Date;
 
-public class Product {
-    private Integer id;
+import javax.persistence.Table;
 
-    private Integer categoryId;
+import com.lmching.mall.model.assist.Pojo;
+
+@Table(name = "Product")
+public class Product extends Pojo {
+	
+	private static final long serialVersionUID = 1869017436926310842L;
+
+	private Long userId;
+
+    private Long categoryId;
 
     private String name;
 
@@ -24,122 +31,86 @@ public class Product {
 
     private Integer status;
 
-    private Date createTime;
+	public Long getUserId() {
+		return userId;
+	}
 
-    private Date updateTime;
+	public void setUserId(Long userId) {
+		this.userId = userId;
+	}
 
-    public Product(Integer id, Integer categoryId, String name, String subtitle, String mainImage, String subImages, String detail, BigDecimal price, Integer stock, Integer status, Date createTime, Date updateTime) {
-        this.id = id;
-        this.categoryId = categoryId;
-        this.name = name;
-        this.subtitle = subtitle;
-        this.mainImage = mainImage;
-        this.subImages = subImages;
-        this.detail = detail;
-        this.price = price;
-        this.stock = stock;
-        this.status = status;
-        this.createTime = createTime;
-        this.updateTime = updateTime;
-    }
+	public Long getCategoryId() {
+		return categoryId;
+	}
 
-    public Product() {
-        super();
-    }
+	public void setCategoryId(Long categoryId) {
+		this.categoryId = categoryId;
+	}
 
-    public Integer getId() {
-        return id;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public Integer getCategoryId() {
-        return categoryId;
-    }
+	public String getSubtitle() {
+		return subtitle;
+	}
 
-    public void setCategoryId(Integer categoryId) {
-        this.categoryId = categoryId;
-    }
+	public void setSubtitle(String subtitle) {
+		this.subtitle = subtitle;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public String getMainImage() {
+		return mainImage;
+	}
 
-    public void setName(String name) {
-        this.name = name == null ? null : name.trim();
-    }
+	public void setMainImage(String mainImage) {
+		this.mainImage = mainImage;
+	}
 
-    public String getSubtitle() {
-        return subtitle;
-    }
+	public String getSubImages() {
+		return subImages;
+	}
 
-    public void setSubtitle(String subtitle) {
-        this.subtitle = subtitle == null ? null : subtitle.trim();
-    }
+	public void setSubImages(String subImages) {
+		this.subImages = subImages;
+	}
 
-    public String getMainImage() {
-        return mainImage;
-    }
+	public String getDetail() {
+		return detail;
+	}
 
-    public void setMainImage(String mainImage) {
-        this.mainImage = mainImage == null ? null : mainImage.trim();
-    }
+	public void setDetail(String detail) {
+		this.detail = detail;
+	}
 
-    public String getSubImages() {
-        return subImages;
-    }
+	public BigDecimal getPrice() {
+		return price;
+	}
 
-    public void setSubImages(String subImages) {
-        this.subImages = subImages == null ? null : subImages.trim();
-    }
+	public void setPrice(BigDecimal price) {
+		this.price = price;
+	}
 
-    public String getDetail() {
-        return detail;
-    }
+	public Integer getStock() {
+		return stock;
+	}
 
-    public void setDetail(String detail) {
-        this.detail = detail == null ? null : detail.trim();
-    }
+	public void setStock(Integer stock) {
+		this.stock = stock;
+	}
 
-    public BigDecimal getPrice() {
-        return price;
-    }
+	public Integer getStatus() {
+		return status;
+	}
 
-    public void setPrice(BigDecimal price) {
-        this.price = price;
-    }
+	public void setStatus(Integer status) {
+		this.status = status;
+	}
 
-    public Integer getStock() {
-        return stock;
-    }
 
-    public void setStock(Integer stock) {
-        this.stock = stock;
-    }
-
-    public Integer getStatus() {
-        return status;
-    }
-
-    public void setStatus(Integer status) {
-        this.status = status;
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
+ 
 }

@@ -1,14 +1,22 @@
-package com.mmall.pojo;
+package com.lmching.mall.model;
 
 import java.math.BigDecimal;
-import java.util.Date;
 
-public class OrderItem {
-    private Integer id;
+import javax.persistence.Column;
+import javax.persistence.Table;
 
-    private Long orderNo;
+import com.lmching.mall.model.assist.Pojo;
 
-    private Integer productId;
+@Table(name = "OrderItem")
+public class OrderItem extends Pojo {
+
+	private static final long serialVersionUID = -4287556497262886185L;
+
+	private Long userId;
+	
+    private Long orderId;
+
+    private Long productId;
 
     private String productName;
 
@@ -20,115 +28,71 @@ public class OrderItem {
 
     private BigDecimal totalPrice;
 
-    private Date createTime;
+    @Column(nullable=false)
+	public Long getUserId() {
+		return userId;
+	}
 
-    private Date updateTime;
+	public void setUserId(Long userId) {
+		this.userId = userId;
+	}
 
-    private Integer userId;
+	@Column(nullable=false)
+	public Long getOrderId() {
+		return orderId;
+	}
 
-    public OrderItem(Integer id, Long orderNo, Integer productId, String productName, String productImage, BigDecimal currentUnitPrice, Integer quantity, BigDecimal totalPrice, Date createTime, Date updateTime, Integer userId) {
-        this.id = id;
-        this.orderNo = orderNo;
-        this.productId = productId;
-        this.productName = productName;
-        this.productImage = productImage;
-        this.currentUnitPrice = currentUnitPrice;
-        this.quantity = quantity;
-        this.totalPrice = totalPrice;
-        this.createTime = createTime;
-        this.updateTime = updateTime;
-        this.userId = userId;
-    }
+	public void setOrderId(Long orderId) {
+		this.orderId = orderId;
+	}
 
-    public OrderItem() {
-        super();
-    }
+	public Long getProductId() {
+		return productId;
+	}
 
-    public Integer getId() {
-        return id;
-    }
+	public void setProductId(Long productId) {
+		this.productId = productId;
+	}
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+	public String getProductName() {
+		return productName;
+	}
 
-    public Long getOrderNo() {
-        return orderNo;
-    }
+	public void setProductName(String productName) {
+		this.productName = productName;
+	}
 
-    public void setOrderNo(Long orderNo) {
-        this.orderNo = orderNo;
-    }
+	public String getProductImage() {
+		return productImage;
+	}
 
-    public Integer getProductId() {
-        return productId;
-    }
+	public void setProductImage(String productImage) {
+		this.productImage = productImage;
+	}
 
-    public void setProductId(Integer productId) {
-        this.productId = productId;
-    }
+	public BigDecimal getCurrentUnitPrice() {
+		return currentUnitPrice;
+	}
 
-    public String getProductName() {
-        return productName;
-    }
+	public void setCurrentUnitPrice(BigDecimal currentUnitPrice) {
+		this.currentUnitPrice = currentUnitPrice;
+	}
 
-    public void setProductName(String productName) {
-        this.productName = productName == null ? null : productName.trim();
-    }
+	public Integer getQuantity() {
+		return quantity;
+	}
 
-    public String getProductImage() {
-        return productImage;
-    }
+	public void setQuantity(Integer quantity) {
+		this.quantity = quantity;
+	}
 
-    public void setProductImage(String productImage) {
-        this.productImage = productImage == null ? null : productImage.trim();
-    }
+	public BigDecimal getTotalPrice() {
+		return totalPrice;
+	}
 
-    public BigDecimal getCurrentUnitPrice() {
-        return currentUnitPrice;
-    }
+	public void setTotalPrice(BigDecimal totalPrice) {
+		this.totalPrice = totalPrice;
+	}
 
-    public void setCurrentUnitPrice(BigDecimal currentUnitPrice) {
-        this.currentUnitPrice = currentUnitPrice;
-    }
 
-    public Integer getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
-    }
-
-    public BigDecimal getTotalPrice() {
-        return totalPrice;
-    }
-
-    public void setTotalPrice(BigDecimal totalPrice) {
-        this.totalPrice = totalPrice;
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
-
-    public Integer getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Integer userId) {
-        this.userId = userId;
-    }
 }

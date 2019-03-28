@@ -4,8 +4,6 @@ package com.lmching.mall.model;
 import java.io.Serializable;
 
 import javax.persistence.Column;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Table(name = "Address")
@@ -29,8 +27,7 @@ public class Address implements Serializable {
 	
 	private boolean active = false;
 	
-	private User user;
-
+	private Long userId;
 
 	public String getName() {
 		return name;
@@ -98,14 +95,13 @@ public class Address implements Serializable {
 		this.active = active;
 	}
 
-	@ManyToOne
-	@JoinColumn(name="userId", nullable=false, updatable=false)
-	public User getUser() {
-		return user;
+	@Column(nullable=false)
+	public Long getUserId() {
+		return userId;
 	}
 
-	public void setUser(User user) {
-		this.user = user;
+	public void setUserId(Long userId) {
+		this.userId = userId;
 	}
 	
 }

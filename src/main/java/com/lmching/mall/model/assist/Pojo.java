@@ -18,11 +18,13 @@ import org.hibernate.annotations.GenerationTime;
 
 @Entity
 public class Pojo implements Serializable {
-	
-	private Long id;	
-	
+
+	private static final long serialVersionUID = -6847280329650821428L;
+
+	private Long id;		
 	
 	private Date createTime = new Date();
+	
 	private Date updateTime;
 	
 	@Id
