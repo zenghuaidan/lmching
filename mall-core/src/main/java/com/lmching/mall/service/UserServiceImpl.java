@@ -23,12 +23,6 @@ public class UserServiceImpl implements UserService{
 
     @Autowired
     private UserRepository userRepository;  
-    
-    @Autowired
-	SessionLocaleResolver localeResolver;
-	
-	@Autowired
-	ResourceBundleMessageSource messageSource;	
 	
 	@Autowired
 	MallProperties mallProperties;
@@ -115,7 +109,7 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
-	public void addNewUser(User user, HttpServletRequest request) {
+	public void addNewUser(User user, HttpServletRequest request, SessionLocaleResolver localeResolver, ResourceBundleMessageSource messageSource) {
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		String activeCode = UUID.randomUUID().toString();
 		user.setActiveCode(activeCode);
@@ -127,7 +121,7 @@ public class UserServiceImpl implements UserService{
 	}
 	
 	@Override
-	public boolean forgetPassword(String email, HttpServletRequest request) {
+	public boolean forgetPassword(String email, HttpServletRequest request, SessionLocaleResolver localeResolver, ResourceBundleMessageSource messageSource) {
 		User user = findByEmail(email);
 		if(user != null) {
 			user.setResetPasswordCode(UUID.randomUUID().toString());

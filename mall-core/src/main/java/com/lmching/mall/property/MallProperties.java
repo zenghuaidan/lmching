@@ -13,10 +13,10 @@ import org.springframework.stereotype.Component;
 @Component
 @ConfigurationProperties(prefix = "lmching")
 @EnableConfigurationProperties
-@PropertySource("classpath:/country.yml")
+//@PropertySource("classpath:/country.yml")
 public class MallProperties {
 	
-	private List<Country> countrys;
+//	private List<Country> countrys;
 	
 	private String domain;
 	
@@ -36,13 +36,13 @@ public class MallProperties {
 	
 	private String fromMail;
 
-	public List<Country> getCountrys() {
-		return countrys;
-	}
-
-	public void setCountrys(List<Country> countrys) {
-		this.countrys = countrys;
-	}
+//	public List<Country> getCountrys() {
+//		return countrys;
+//	}
+//
+//	public void setCountrys(List<Country> countrys) {
+//		this.countrys = countrys;
+//	}
 	
 	public String getDomain() {
 		return domain;
@@ -116,13 +116,13 @@ public class MallProperties {
 		this.fromMail = fromMail;
 	}
 
-	public List<Pair<String, String>> getCountrys(Locale locale) {
-		List<Pair<String, String>> list = new ArrayList<>();
-		for(Country country : countrys) {
-			list.add(Pair.of(country.getId(), country.getName(locale)));
-		}
-		return list;
-	}
+//	public List<Pair<String, String>> getCountrys(Locale locale) {
+//		List<Pair<String, String>> list = new ArrayList<>();
+//		for(Country country : countrys) {
+//			list.add(Pair.of(country.getId(), country.getName(locale)));
+//		}
+//		return list;
+//	}
 
 	public static class Country {
 		private String id;

@@ -1,14 +1,20 @@
 package com.lmching.mall.model;
 
 
-import java.io.Serializable;
 import java.util.Locale;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.Table;
 
-@Table(name = "Category")
-public class Category implements Serializable {
+import com.lmching.mall.model.assist.Pojo;
+
+@Table(name = "mall_category")
+@Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+public class Category extends Pojo {
 	
 	private static final long serialVersionUID = -5051085506032468813L;
 
@@ -20,7 +26,7 @@ public class Category implements Serializable {
 	
 	private String nameTC;
 		
-	private Integer order;
+	private Integer corder;
 	
 	private boolean active = true;
 		
@@ -59,12 +65,12 @@ public class Category implements Serializable {
 		this.nameTC = nameTC;
 	}
 	
-	public int getOrder() {
-		return order;
+	public Integer getCorder() {
+		return corder;
 	}
 
-	public void setOrder(int order) {
-		this.order = order;
+	public void setCorder(Integer corder) {
+		this.corder = corder;
 	}
 
 	@Column(nullable=false)

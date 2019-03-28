@@ -3,11 +3,16 @@ package com.lmching.mall.model;
 import java.math.BigDecimal;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.Table;
 
 import com.lmching.mall.model.assist.Pojo;
 
-@Table(name = "OrderItem")
+@Table(name = "mall_order_item")
+@Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public class OrderItem extends Pojo {
 
 	private static final long serialVersionUID = -4287556497262886185L;

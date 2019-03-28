@@ -1,13 +1,18 @@
 package com.lmching.mall.model;
 
 
-import java.io.Serializable;
-
 import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.Table;
 
-@Table(name = "Address")
-public class Address implements Serializable {
+import com.lmching.mall.model.assist.Pojo;
+
+@Table(name = "mall_address")
+@Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+public class Address extends Pojo {
 
 	private static final long serialVersionUID = 7482818683522267764L;
 

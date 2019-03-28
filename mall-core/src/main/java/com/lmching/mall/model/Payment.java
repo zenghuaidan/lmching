@@ -1,14 +1,19 @@
 package com.lmching.mall.model;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.Table;
 
 import com.lmching.mall.model.assist.PaymentType;
 import com.lmching.mall.model.assist.Pojo;
 
-@Table(name = "Payment")
+@Table(name = "mall_payment")
+@Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public class Payment extends Pojo {
 
 	private static final long serialVersionUID = 7053917390394018909L;

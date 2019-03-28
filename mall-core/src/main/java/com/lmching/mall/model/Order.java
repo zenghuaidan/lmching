@@ -4,8 +4,11 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -13,7 +16,9 @@ import javax.persistence.TemporalType;
 import com.lmching.mall.model.assist.OrderStatus;
 import com.lmching.mall.model.assist.Pojo;
 
-@Table(name = "Order")
+@Table(name = "mall_order")
+@Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public class Order extends Pojo {
 
 	private static final long serialVersionUID = 6286945117715112467L;

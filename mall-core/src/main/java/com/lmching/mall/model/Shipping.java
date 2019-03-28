@@ -1,10 +1,15 @@
 package com.lmching.mall.model;
 
+import javax.persistence.Entity;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.Table;
 
 import com.lmching.mall.model.assist.Pojo;
 
-@Table(name = "Shipping")
+@Table(name = "mall_shipping")
+@Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public class Shipping extends Pojo {
 
 	private static final long serialVersionUID = 3598153098837721761L;

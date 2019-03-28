@@ -5,6 +5,9 @@ import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 
+import org.springframework.context.support.ResourceBundleMessageSource;
+import org.springframework.web.servlet.i18n.SessionLocaleResolver;
+
 import com.lmching.mall.model.User;
 
 @Transactional
@@ -18,7 +21,7 @@ public interface UserService {
 
     public void save(User user);
     
-    public void addNewUser(User user, HttpServletRequest request);
+    public void addNewUser(User user, HttpServletRequest request, SessionLocaleResolver localeResolver, ResourceBundleMessageSource messageSource);
 
     public void edit(User user);
 
@@ -32,6 +35,6 @@ public interface UserService {
 
 	public boolean updatePasswordByResetPasswordCode(String password, String resetPasswordCode);
 
-	public boolean forgetPassword(String email, HttpServletRequest request);
+	public boolean forgetPassword(String email, HttpServletRequest request, SessionLocaleResolver localeResolver, ResourceBundleMessageSource messageSource);
     
 }
