@@ -53,7 +53,7 @@ public class MallSecurityConfig extends WebSecurityConfigurerAdapter {
 		.failureHandler(new SimpleUrlAuthenticationFailureHandler("/signin"))
 		.and()
 		.authorizeRequests()
-				.antMatchers("/login", "/doLogin", "/index")
+				.antMatchers("/login", "/doLogin", "/index", "/editor", "/grid", "/boot")
 					.permitAll()
 				.anyRequest()
 				.authenticated()
