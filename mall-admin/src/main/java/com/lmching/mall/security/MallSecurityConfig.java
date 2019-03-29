@@ -53,7 +53,7 @@ public class MallSecurityConfig extends WebSecurityConfigurerAdapter {
 		.failureHandler(new SimpleUrlAuthenticationFailureHandler("/signin"))
 		.and()
 		.authorizeRequests()
-				.antMatchers("/login", "/doLogin")
+				.antMatchers("/login", "/doLogin", "/index")
 					.permitAll()
 				.anyRequest()
 				.authenticated()
@@ -71,7 +71,7 @@ public class MallSecurityConfig extends WebSecurityConfigurerAdapter {
 	public void configure(WebSecurity web) throws Exception {
 	    web
         	.ignoring()
-        	.antMatchers("/css/**", "/images/**", "/script/**");
+        	.antMatchers("/css/**", "/images/**", "/script/**", "/fonts/**", "/bootstrap/**");
 	}
 
 	@Bean
