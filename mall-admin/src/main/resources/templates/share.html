@@ -36,19 +36,19 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="index.html" title="PB Dashboard">PB Dashboard</a>
+        <a class="navbar-brand" th:href="@{/index}" title="PB Dashboard">Admin Dashboard</a>
     </div>
     <div class="collapse navbar-collapse navbar-ex1-collapse">
         <ul class="nav navbar-nav side-nav">
-            <li class="active"><a href="index.html"><i class="glyphicon glyphicon-th"></i> Dashboard</a></li>
+            <li class="active"><a th:href="@{/index}"><i class="glyphicon glyphicon-th"></i> Dashboard</a></li>
             <li class="nav nav-list nav-list-expandable nav-list-expanded">
                 <a><i class="fa fa-user"></i> More Widgets <span class="caret"></span></a>
                 <ul class="nav navbar-nav">
-                    <li><a href="datagrid.html"><i class="fa fa-table"></i> Data Grid</a></li>
-                    <li><a href="editor.html"><i class="fa fa-edit"></i> Editor</a></li>
+                    <li><a th:href="@{/grid}"><i class="fa fa-table"></i> Data Grid</a></li>
+                    <li><a th:href="@{/editor}"><i class="fa fa-edit"></i> Editor</a></li>
                 </ul>
             </li>
-            <li><a href="bootstrap.html"><i class="fa fa-magic"></i> Bootstrap Elements</a></li>
+            <li><a th:href="@{/boot}"><i class="fa fa-magic"></i> Bootstrap Elements</a></li>
             <li class="nav nav-list nav-list-expandable">
                 <a><i class="fa fa-key"></i> Collapsed Menu Item <span class="caret"></span></a>
                 <ul class="nav navbar-nav">
