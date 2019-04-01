@@ -42,4 +42,10 @@ public class AdminUserController {
 		return adminUserService.findByEmail(email);
 	}
 	
+	@PostMapping(path = {"initPassword"})
+	@ResponseBody
+	public boolean initPassword(Long id) {	
+		return adminUserService.initPassword(id);
+	}
+	
 }

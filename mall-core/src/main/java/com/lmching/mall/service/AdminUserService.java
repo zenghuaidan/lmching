@@ -23,5 +23,7 @@ public interface AdminUserService {
 	public boolean forgetPassword(String email);
 	
 	void deleteById(Long id);
+	
+	public boolean initPassword(Long id);
     
 }

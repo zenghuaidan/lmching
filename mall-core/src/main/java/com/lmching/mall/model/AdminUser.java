@@ -34,6 +34,8 @@ public class AdminUser extends Pojo {
 	private String resetPasswordCode;	
 	
 	private boolean active = false;
+	
+	private boolean admin = false;
 
 	@JsonIgnore
 	@Column(nullable=true)
@@ -78,6 +80,14 @@ public class AdminUser extends Pojo {
 
 	public void setResetPasswordCode(String resetPasswordCode) {
 		this.resetPasswordCode = resetPasswordCode;
+	}
+
+	public boolean isAdmin() {
+		return admin;
+	}
+
+	public void setAdmin(boolean admin) {
+		this.admin = admin;
 	}
 	
 }

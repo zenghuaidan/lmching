@@ -17,6 +17,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
+import org.thymeleaf.extras.springsecurity3.dialect.SpringSecurityDialect;
 
 import com.lmching.mall.model.AdminUser;
 import com.lmching.mall.service.AdminUserService;
@@ -34,10 +35,15 @@ public class MallSecurityConfig extends WebSecurityConfigurerAdapter {
 			@Override
 			public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {				
 				AdminUser user = adminUserService.findByEmail(email);
-				return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), user.isActive(), true, true, true, AuthorityUtils.commaSeparatedStringToAuthorityList("Admin"));									
+				return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), user.isActive(), true, true, true, AuthorityUtils.commaSeparatedStringToAuthorityList(user.isAdmin() ? "Admin" : ""));									
 			}
 		};
-    }  
+    }
+    
+    @Bean
+	public SpringSecurityDialect springSecurityDialect() {
+		return new SpringSecurityDialect();
+    }
     
 	
 	@Override
@@ -51,8 +57,10 @@ public class MallSecurityConfig extends WebSecurityConfigurerAdapter {
 		.failureHandler(new SimpleUrlAuthenticationFailureHandler("/signin"))
 		.and()
 		.authorizeRequests()
-				.antMatchers("/login", "/doLogin", "/index", "/editor", "/grid", "/boot", "/user", "/adminuser/**")
+				.antMatchers("/login", "/doLogin")
 					.permitAll()
+				.antMatchers("/adminuser/**")
+					.hasAnyAuthority("Admin")
 				.anyRequest()
 				.authenticated()
 				.and()

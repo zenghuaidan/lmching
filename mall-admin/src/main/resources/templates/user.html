@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-<div th:replace="~{share :: head('Manage User')}"></div>
+<div th:replace="~{share :: head('Manage Admin User')}"></div>
 <body>
     <div id="wrapper">
         <div th:replace="~{share :: menubar}"></div>
@@ -43,11 +43,13 @@
 	</script>
     
     <script type="text/javascript">
+    	var editId = -1;
 		var listUrl = "[[@{/adminuser/list}]]";
 		var createUrl = "[[@{/adminuser/create}]]";
 		var updateUrl = "[[@{/adminuser/update}]]";
-		var deleteUrl = "[[@{/adminuser/delete}]]";
+		var deleteUrl = "[[@{/adminuser/delete}]]";		
 		var findByEmailUrl = "[[@{/adminuser/findByEmail}]]";
+		var initPasswordUrl = "[[@{/adminuser/initPassword}]]";
 	    function nameValidator(value) {
 	        if (value == "") {
 	            return undefined;
@@ -77,7 +79,6 @@
 	            return exist ? undefined : value;
 	        }
 	    }
-	    var editId;
         jQuery(function ($) {
             $("#grid").shieldGrid({
                 dataSource: {
@@ -144,13 +145,18 @@
                         	{ commandName: "edit", caption: "Edit" },
                             /* { commandName: "delete", caption: "Delete" }, */
 	    		            {
-	    		                caption: "Reset Password",
-	    		                commandName: "resetPassword",
+	    		                caption: "Init Password",
+	    		                commandName: "initPassword",
 	    		                click: function (rowIndex) {
-	
 	    		                    var item = $("#grid").swidget().dataItem(rowIndex);
-	    		                    var value = "Name: " + item.name;
-	    		                    alert(value);
+	    		    	        	$.post({
+	    		    	        		url: initPasswordUrl,
+	    		    	        		data: {"id" : item.id},
+	    		    	        		success: function(data) {
+	    		    	        			if(data) alert("email sent");
+	    		    	        		}
+	    		    	        	});	
+	    		                    
 	    		                }
 	    		            }
                         ]

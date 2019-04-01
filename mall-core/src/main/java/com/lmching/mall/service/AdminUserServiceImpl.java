@@ -75,6 +75,21 @@ public class AdminUserServiceImpl implements AdminUserService {
 		}
 		return false;
 	}
+	
+	@Override
+	public boolean initPassword(Long id) {
+		AdminUser user = findById(id);
+		if(user != null) {
+			String password = UUID.randomUUID().toString().substring(0, 6);
+			user.setPassword(passwordEncoder.encode(password));
+			adminUserRepository.save(user);		
+			String subject = "New Password";
+			String content = "Hi, " + user.getName() + ",<br/><br/>You password have been reset to:" + password + " <br/><br/>Sincerely,<br/>LMCHING Group";
+			emailService.sendSimpleMail(user.getEmail(), subject, content);
+			return true;
+		}
+		return false;
+	}
 
 	@Override
 	public Iterable<AdminUser> findAll() {
