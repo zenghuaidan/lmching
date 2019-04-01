@@ -5,6 +5,9 @@ import java.util.UUID;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.domain.Sort.Order;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -13,9 +16,10 @@ import com.lmching.mall.model.User;
 import com.lmching.mall.property.MallProperties;
 import com.lmching.mall.repository.AdminUserRepository;
 
+
 @Service
 @Transactional
-public class AdminServiceImpl implements AdminUserService {
+public class AdminUserServiceImpl implements AdminUserService {
 
     @Autowired
     private AdminUserRepository adminUserRepository;  
@@ -40,8 +44,8 @@ public class AdminServiceImpl implements AdminUserService {
     }
 
     @Override
-    public void save(AdminUser user) {
-    	adminUserRepository.save(user);
+    public AdminUser save(AdminUser user) {
+    	return adminUserRepository.save(user);
     }
 
 	@Override
@@ -70,6 +74,16 @@ public class AdminServiceImpl implements AdminUserService {
 			return true;
 		}
 		return false;
+	}
+
+	@Override
+	public Iterable<AdminUser> findAll() {
+		return adminUserRepository.findAll(new Sort(new Order(Direction.ASC, "id")));
+	}
+
+	@Override
+	public void deleteById(Long id) {
+		adminUserRepository.delete(id);
 	}
 	
 }

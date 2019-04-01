@@ -23,58 +23,189 @@
         <!-- /#page-wrapper -->
     </div>
     <!-- /#wrapper -->
-
-    <script type="text/javascript" th:src="@{/script/gridData.js}"></script>
+    <style type="text/css">
+	    .sui-button-cell {
+	        text-align: center;
+	    }
+	    div .sui-table td .invalid-back {
+	        background-color: #ffe0e1;
+	    }
+	    .invalid-border {
+	         border: 1px solid red;
+	    }
+	</style>
     <!-- https://fontawesome.com/icons/user?style=solid -->
     <script id="activeStatusTemplate" type="text/x-shield-template">
-		<img th:src="@{/images/icon-inactive.png}">
+		<img th:src="@{/images/icon-active.png}">
 	</script>
     <script id="inactiveStatusTemplate" type="text/x-shield-template">
-		<img th:src="@{/images/icon-active.png}">
+		<img th:src="@{/images/icon-inactive.png}">
 	</script>
     
     <script type="text/javascript">
+		var listUrl = "[[@{/adminuser/list}]]";
+		var createUrl = "[[@{/adminuser/create}]]";
+		var updateUrl = "[[@{/adminuser/update}]]";
+		var deleteUrl = "[[@{/adminuser/delete}]]";
+		var findByEmailUrl = "[[@{/adminuser/findByEmail}]]";
+	    function nameValidator(value) {
+	        if (value == "") {
+	            return undefined;
+	        }
+	        else {
+	            return value;
+	        }
+	    }
+	    function emailValidator(value) {
+	    	var reg = new RegExp("^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$");
+	        if (value == "" || !reg.test(value)) {
+	            return undefined;
+	        }
+	        else {
+	        	var exist = true;
+	        	$.post({
+	        		url: findByEmailUrl,
+	        		async:false,
+	        		data: {"email" : value},
+	        		success: function(data) {
+	        			exist = data != "" && data.id != editId;
+	        		},
+	        		error: function() {
+	        			exist = true;
+	        		}
+	        	});	        		        	
+	            return exist ? undefined : value;
+	        }
+	    }
+	    var editId;
         jQuery(function ($) {
             $("#grid").shieldGrid({
                 dataSource: {
-                    data: gridData                 
+                    remote: {
+                        read: listUrl,
+                        modify: {
+                            create: {
+                                url: createUrl,
+                                type: "post",
+                                data: function (edited) {
+                                    return {
+                                        name: $.trim(edited[0].data.name),
+                                        email: $.trim(edited[0].data.email),
+                                        active: edited[0].data.active,
+                                        id: edited[0].data.id
+                                    };
+                                }
+                            },
+                            update: {
+                                url: updateUrl,
+                                type: "post",
+                                data: function (edited) {
+                                    return {
+                                        name: $.trim(edited[0].data.name),
+                                        email: $.trim(edited[0].data.email),
+                                        active: edited[0].data.active,
+                                        id: edited[0].data.id
+                                    };
+                                }
+                            },
+                            remove: {
+                                url: deleteUrl,
+                                type: "post",
+                                data: function (removed) {
+                                    return { id: removed[0].data.id };
+                                }
+                            }
+                        }
+                    },
+                    schema: {
+                        fields: {
+                            id: { path: "id", type: Number },
+                            name: { path: "name", type: String, validator: nameValidator },
+                            email: { path: "email", type: String, validator: emailValidator },
+                            active: { path: "active", type: Boolean }
+                        }
+                    }
                 },
                 sorting:{
-                    multiple: true
+                    multiple: false
                 },
                 paging: {
-                    pageSize: 12,
-                    pageLinksCount: 10
+                    pageSize: 5
                 },
-                selection:{
-                    type: "row",
-                    multiple: false,
-                    toggle: false
-                },
-                columns: [                
-                    { field: "name", width: "100px", title: "Person Name" },
-                    { field: "email", title:"Email Address", width: "100px" },
-                    { field: "isActive", title: "Status", columnTemplate: function(cell, item) { if(item['isActive']) $($("#activeStatusTemplate").html()).appendTo(cell); else $($("#inactiveStatusTemplate").html()).appendTo(cell); }, width: "25px", attributes: { style: "text-align: center;" } },
+                rowHover: false,
+                columns: [
+                    { field: "name", title: "Name"},
+                    { field: "email", title: "email" },
+                    { field: "active", title: "Active", columnTemplate: function(cell, item) { if(item['active']) $($("#activeStatusTemplate").html()).appendTo(cell); else $($("#inactiveStatusTemplate").html()).appendTo(cell); } },
                     {
-                        title: "Function",
-                        width: "140px",
+                        width: 250,
+                        title: " ",
                         buttons: [
+                        	{ commandName: "edit", caption: "Edit" },
+                            /* { commandName: "delete", caption: "Delete" }, */
 	    		            {
-	    		                cls: "myButtonCssClass",
-	    		                caption: "<div class='details'></div>Show Details",
-	    		                commandName: "details",
+	    		                caption: "Reset Password",
+	    		                commandName: "resetPassword",
 	    		                click: function (rowIndex) {
 	
 	    		                    var item = $("#grid").swidget().dataItem(rowIndex);
-	    		                    var value = "Name: " + item.name + "\n" + "Company:  " + item.company +
-	                                    "\n" + "Email:  " + item.email + "\n" + "Address: " + item.address;
+	    		                    var value = "Name: " + item.name;
 	    		                    alert(value);
 	    		                }
 	    		            }
-    		            ]
+                        ]
+                    }
+                ],
+                editing: {
+                    enabled: true,
+                    //event: "doubleclick",//doubleclick,click
+                    type: "row",
+                    confirmation: {
+                        "delete": {
+                            enabled: true,
+                            template: function (item) {
+                                return "Delete user with name '" + item.name + "'?";
+                            }
+                        },
+                        "save": {
+                            enabled: true,
+                            template: function (item) {
+                                return "Delete user with name '" + item.name + "'?";
+                            }
+                        }
+                    }
+                },
+                events:
+                {
+                    error: function (e) {
+                        switch (e.path) {
+                            case "name":
+                                e.editor.element.addClass("invalid-back invalid-border");
+                                break;
+                            case "email":
+                            	e.editor.element.addClass("invalid-back invalid-border");
+                                break;
+                            default:
+                                break;
+                        }
+                    },
+                	command: function (e) {
+                		editId = -1;
+	                    if (e.commandName == "edit") {
+	                    	editId = e.target.dataSource.data[e.index].id;
+	                    }	                    
+                    }
+                },
+                toolbar: [
+                    {
+                        buttons: [
+                            { commandName: "insert", caption: "Add User" }
+                        ],
+                        position: "top"
                     }
                 ]
             });
+        	
         });
     </script>
 </body>

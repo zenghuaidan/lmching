@@ -1,6 +1,7 @@
 package com.lmching.mall.repository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
@@ -8,12 +9,12 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import com.lmching.mall.model.AdminUser;
 
 public interface AdminUserRepository extends PagingAndSortingRepository<AdminUser, Long> {
+	
+	Iterable<AdminUser> findAll(Sort sort);
 
     AdminUser findById(Long id);
     
-    AdminUser findByEmail(String email);       
-    
-    void deleteById(Long id);
+    AdminUser findByEmail(String email);             
     
     @Modifying
     @Query("update AdminUser u set u.password = ?1 where u.email = ?2")
