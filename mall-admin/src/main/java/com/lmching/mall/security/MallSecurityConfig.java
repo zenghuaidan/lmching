@@ -15,9 +15,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
-import org.thymeleaf.extras.springsecurity3.dialect.SpringSecurityDialect;
+import org.thymeleaf.extras.springsecurity4.dialect.SpringSecurityDialect;
 
 import com.lmching.mall.model.AdminUser;
 import com.lmching.mall.service.AdminUserService;
@@ -35,7 +36,7 @@ public class MallSecurityConfig extends WebSecurityConfigurerAdapter {
 			@Override
 			public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {				
 				AdminUser user = adminUserService.findByEmail(email);
-				return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), user.isActive(), true, true, true, AuthorityUtils.commaSeparatedStringToAuthorityList(user.isAdmin() ? "Admin" : ""));									
+				return new org.springframework.security.core.userdetails.User(user.getName(), user.getPassword(), user.isActive(), true, true, true, AuthorityUtils.commaSeparatedStringToAuthorityList(user.isAdmin() ? "ADMIN" : "USER"));									
 			}
 		};
     }
@@ -45,7 +46,6 @@ public class MallSecurityConfig extends WebSecurityConfigurerAdapter {
 		return new SpringSecurityDialect();
     }
     
-	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.formLogin()
@@ -59,8 +59,8 @@ public class MallSecurityConfig extends WebSecurityConfigurerAdapter {
 		.authorizeRequests()
 				.antMatchers("/login", "/doLogin")
 					.permitAll()
-				.antMatchers("/adminuser/**")
-					.hasAnyAuthority("Admin")
+				.antMatchers("/adminuser/**", "/user")
+					.hasAnyAuthority("ADMIN")
 				.anyRequest()
 				.authenticated()
 				.and()

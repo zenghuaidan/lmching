@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 
 
 <head th:fragment="head (title)">
@@ -81,10 +81,11 @@
         <a class="navbar-brand" th:href="@{/index}" title="PB Dashboard">Admin Dashboard</a>
     </div>
     <!-- https://github.com/thymeleaf/thymeleaf-extras-springsecurity -->
+    <!-- https://stackoverflow.com/questions/41388332/thymeleaf-3-0-spring-boot-security-integration-does-not-work -->
     <div class="collapse navbar-collapse navbar-ex1-collapse">
         <ul class="nav navbar-nav side-nav">
             <li class="active"><a th:href="@{/index}"><i class="glyphicon glyphicon-th"></i> Dashboard</a></li>
-           	<li><a th:href="@{/user}"><i class="fa fa-user"></i> Admin User</a></li>
+           	<li sec:authorize="hasAuthority('ADMIN')"><a th:href="@{/user}"><i class="fa fa-user"></i> Admin User</a></li>
             <li class="nav nav-list nav-list-expandable nav-list-expanded">
                 <a><i class="fa fa-user"></i> More Widgets <span class="caret"></span></a>
                 <ul class="nav navbar-nav">
@@ -124,7 +125,7 @@
                 </ul>
             </li>
             <li class="dropdown user-dropdown">
-               <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> <span sec:authentication="name"></span><b class="caret"></b></a>
+               <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> <span sec:authentication="name"></span><!-- <span sec:authentication="principal.authorities"></span> --><b class="caret"></b></a>
                <ul class="dropdown-menu">
                    <li><a href="#"><i class="fa fa-user"></i> Profile</a></li>
                    <li><a href="javascript:changePassword()"><i class="fa fa-gear"></i> Settings</a></li>
