@@ -5,6 +5,7 @@
     <title th:text="${title}"></title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/jquery-ui/1.12.1/jquery-ui.css}"/>
     <link rel="stylesheet" type="text/css" th:href="@{/bootstrap/css/bootstrap.min.css}" />
     <link rel="stylesheet" type="text/css" th:href="@{/fonts/font-awesome/css/font-awesome.min.css}" />
 
@@ -20,7 +21,10 @@
 		<script th:src="@{/script/respond.min.js}"></script>
 	<![endif]--> 	
 	
-    <script type="text/javascript" th:src="@{/script/jquery-1.10.2.min.js}"></script>
+	<script th:src="@{/webjars/jquery/3.3.1-1/jquery.js}"></script>	
+	<script th:src="@{/webjars/jquery-ui/1.12.1/jquery-ui.js}"></script>
+	
+    <!-- <script type="text/javascript" th:src="@{/script/jquery-1.10.2.min.js}"></script> -->
     <script type="text/javascript" th:src="@{/bootstrap/js/bootstrap.min.js}"></script> 
 
     <script type="text/javascript" th:src="@{/script/shieldui-all.min.js}"></script>
@@ -41,13 +45,14 @@
     <div class="collapse navbar-collapse navbar-ex1-collapse">
         <ul class="nav navbar-nav side-nav">
             <li class="active"><a th:href="@{/index}"><i class="glyphicon glyphicon-th"></i> Dashboard</a></li>
+            <li><a th:href="@{/user}"><i class="fa fa-user"></i> Admin User</a></li>
             <li class="nav nav-list nav-list-expandable nav-list-expanded">
                 <a><i class="fa fa-user"></i> More Widgets <span class="caret"></span></a>
                 <ul class="nav navbar-nav">
                     <li><a th:href="@{/grid}"><i class="fa fa-table"></i> Data Grid</a></li>
                     <li><a th:href="@{/editor}"><i class="fa fa-edit"></i> Editor</a></li>
                 </ul>
-            </li>
+            </li>            
             <li><a th:href="@{/boot}"><i class="fa fa-magic"></i> Bootstrap Elements</a></li>
             <li class="nav nav-list nav-list-expandable">
                 <a><i class="fa fa-key"></i> Collapsed Menu Item <span class="caret"></span></a>

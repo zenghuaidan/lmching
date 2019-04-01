@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<div th:replace="~{share :: head('Manage User')}"></div>
+<body>
+    <div id="wrapper">
+        <div th:replace="~{share :: menubar}"></div>
+
+        <div id="page-wrapper">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="page-header">
+                        <h1>Manage Admin User <small></small></h1>
+                    </div>
+<!--                     <div class="alert alert-success alert-dismissable">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        This theme page uses the Grid widget, part of the <a href="https://www.shieldui.com" target="_blank">Shield UI</a> JavaScript library.
+                    </div> -->
+                    <div id="grid"></div>
+                </div>
+            </div>
+            <!-- /.row -->
+        </div>
+        <!-- /#page-wrapper -->
+    </div>
+    <!-- /#wrapper -->
+
+    <script type="text/javascript" th:src="@{/script/gridData.js}"></script>
+    <!-- https://fontawesome.com/icons/user?style=solid -->
+    <script id="activeStatusTemplate" type="text/x-shield-template">
+		<img th:src="@{/images/icon-inactive.png}">
+	</script>
+    <script id="inactiveStatusTemplate" type="text/x-shield-template">
+		<img th:src="@{/images/icon-active.png}">
+	</script>
+    
+    <script type="text/javascript">
+        jQuery(function ($) {
+            $("#grid").shieldGrid({
+                dataSource: {
+                    data: gridData                 
+                },
+                sorting:{
+                    multiple: true
+                },
+                paging: {
+                    pageSize: 12,
+                    pageLinksCount: 10
+                },
+                selection:{
+                    type: "row",
+                    multiple: false,
+                    toggle: false
+                },
+                columns: [                
+                    { field: "name", width: "100px", title: "Person Name" },
+                    { field: "email", title:"Email Address", width: "100px" },
+                    { field: "isActive", title: "Status", columnTemplate: function(cell, item) { if(item['isActive']) $($("#activeStatusTemplate").html()).appendTo(cell); else $($("#inactiveStatusTemplate").html()).appendTo(cell); }, width: "25px", attributes: { style: "text-align: center;" } },
+                    {
+                        title: "Function",
+                        width: "140px",
+                        buttons: [
+	    		            {
+	    		                cls: "myButtonCssClass",
+	    		                caption: "<div class='details'></div>Show Details",
+	    		                commandName: "details",
+	    		                click: function (rowIndex) {
+	
+	    		                    var item = $("#grid").swidget().dataItem(rowIndex);
+	    		                    var value = "Name: " + item.name + "\n" + "Company:  " + item.company +
+	                                    "\n" + "Email:  " + item.email + "\n" + "Address: " + item.address;
+	    		                    alert(value);
+	    		                }
+	    		            }
+    		            ]
+                    }
+                ]
+            });
+        });
+    </script>
+</body>
+</html>

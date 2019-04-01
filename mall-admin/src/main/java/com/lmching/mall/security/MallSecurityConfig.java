@@ -3,8 +3,6 @@
  */
 package com.lmching.mall.security;
 
-import java.util.UUID;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,14 +18,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 
-import com.lmching.mall.model.User;
-import com.lmching.mall.service.UserService;
+import com.lmching.mall.model.AdminUser;
+import com.lmching.mall.service.AdminUserService;
 
 @Configuration
 public class MallSecurityConfig extends WebSecurityConfigurerAdapter {	
 	
 	@Autowired
-	UserService userService;
+	AdminUserService adminUserService;
 	
     @Bean
 	public UserDetailsService userDetailsService() {
@@ -35,8 +33,8 @@ public class MallSecurityConfig extends WebSecurityConfigurerAdapter {
 			
 			@Override
 			public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {				
-				User user = userService.findByEmail(email);
-				return new org.springframework.security.core.userdetails.User(user.getEmail(), user.isAdmin() ? user.getPassword() : UUID.randomUUID().toString(), user.isActive(), true, true, !user.isLock(), AuthorityUtils.commaSeparatedStringToAuthorityList(user.getType().name()));									
+				AdminUser user = adminUserService.findByEmail(email);
+				return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), user.isActive(), true, true, true, AuthorityUtils.commaSeparatedStringToAuthorityList("Admin"));									
 			}
 		};
     }  
@@ -53,7 +51,7 @@ public class MallSecurityConfig extends WebSecurityConfigurerAdapter {
 		.failureHandler(new SimpleUrlAuthenticationFailureHandler("/signin"))
 		.and()
 		.authorizeRequests()
-				.antMatchers("/login", "/doLogin", "/index", "/editor", "/grid", "/boot")
+				.antMatchers("/login", "/doLogin", "/index", "/editor", "/grid", "/boot", "/user")
 					.permitAll()
 				.anyRequest()
 				.authenticated()

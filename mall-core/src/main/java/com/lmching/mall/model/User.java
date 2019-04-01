@@ -162,11 +162,6 @@ public class User extends Pojo {
 		return numFail >= 10;
 	}
 	
-	@Transient
-	public boolean isAdmin() {		
-		return UserType.Admin.equals(this.type);
-	}
-	
 	public String getActiveCode() {
 		return activeCode;
 	}

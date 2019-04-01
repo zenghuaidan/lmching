@@ -69,7 +69,7 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public void failLogin(String email) {
 		User user = userRepository.findByEmail(email);
-		if (user != null && !user.isAdmin()) {
+		if (user != null) {
 			user.setNumFail(user.getNumFail() + 1);
 			userRepository.save(user);
 		}
@@ -78,7 +78,7 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public void successLogin(String email) {
 		User user = userRepository.findByEmail(email);
-		if (user != null && !user.isAdmin()) {
+		if (user != null) {
 			user.setNumFail(0);
 			userRepository.save(user);
 		}
