@@ -3,12 +3,19 @@
  */
 package com.lmching.mall.security;
 
+import java.io.IOException;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -36,7 +43,7 @@ public class MallSecurityConfig extends WebSecurityConfigurerAdapter {
 			@Override
 			public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {				
 				AdminUser user = adminUserService.findByEmail(email);
-				return new org.springframework.security.core.userdetails.User(user.getName(), user.getPassword(), user.isActive(), true, true, true, AuthorityUtils.commaSeparatedStringToAuthorityList(user.isAdmin() ? "ADMIN" : "USER"));									
+				return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), user.isActive(), true, true, true, AuthorityUtils.commaSeparatedStringToAuthorityList(user.isAdmin() ? "ADMIN" : "USER"));									
 			}
 		};
     }
@@ -46,6 +53,22 @@ public class MallSecurityConfig extends WebSecurityConfigurerAdapter {
 		return new SpringSecurityDialect();
     }
     
+    class MyAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
+    	
+    	public MyAuthenticationSuccessHandler(String defaultTargetUrl) {
+    		super(defaultTargetUrl);
+    	}
+    	
+    	@Override
+    	public void onAuthenticationSuccess(HttpServletRequest request,
+    			HttpServletResponse response, Authentication authentication)
+    			throws IOException, ServletException {
+    		AdminUser user = adminUserService.findByEmail(((org.springframework.security.core.userdetails.User)authentication.getPrincipal()).getUsername());
+    		request.getSession().setAttribute("user", user);
+    		super.onAuthenticationSuccess(request, response, authentication);
+    	}
+    }
+    
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.formLogin()
@@ -53,7 +76,7 @@ public class MallSecurityConfig extends WebSecurityConfigurerAdapter {
 		.loginProcessingUrl("/doLogin")
 		.usernameParameter("email")
 		.passwordParameter("password")
-		.successHandler(new SimpleUrlAuthenticationSuccessHandler("/index"))
+		.successHandler(new MyAuthenticationSuccessHandler("/index"))
 		.failureHandler(new SimpleUrlAuthenticationFailureHandler("/signin"))
 		.and()
 		.authorizeRequests()

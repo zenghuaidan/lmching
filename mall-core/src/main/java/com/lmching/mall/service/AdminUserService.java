@@ -25,5 +25,5 @@ public interface AdminUserService {
 	void deleteById(Long id);
 	
 	public boolean initPassword(Long id);
-    
+
 }

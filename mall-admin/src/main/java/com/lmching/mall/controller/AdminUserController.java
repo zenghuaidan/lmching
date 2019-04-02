@@ -1,13 +1,10 @@
 package com.lmching.mall.controller;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -59,6 +56,12 @@ public class AdminUserController {
 	@ResponseBody
 	public boolean initPassword(Long id) {	
 		return adminUserService.initPassword(id);
+	}
+	
+	@PostMapping(path = {"changePassword"})
+	@ResponseBody
+	public boolean changePassword(String password, Authentication authentication) {	
+		return adminUserService.updatePassword(password, ((org.springframework.security.core.userdetails.User)authentication.getPrincipal()).getUsername()) > 0;
 	}
 	
 }

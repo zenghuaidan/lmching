@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import javax.transaction.Transactional;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
@@ -50,7 +51,8 @@ public class AdminUserServiceImpl implements AdminUserService {
 
 	@Override
 	public int updatePassword(String password, String email) {
-		return adminUserRepository.updatePassword(password, email);
+		if(StringUtils.isBlank(password)) return 0;
+		return adminUserRepository.updatePassword(passwordEncoder.encode(password), email);
 	}
 	
 	@Override
@@ -100,5 +102,5 @@ public class AdminUserServiceImpl implements AdminUserService {
 	public void deleteById(Long id) {
 		adminUserRepository.delete(id);
 	}
-	
+
 }
