@@ -1,9 +1,13 @@
 package com.lmching.mall.controller;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -27,7 +31,16 @@ public class AdminUserController {
 	@PostMapping(path = {"create", "update"})
 	@ResponseBody
 	public AdminUser createOrUpdate(AdminUser user) {
-		return adminUserService.save(user);
+		AdminUser userDB = null;
+		if(user.getId() != null) {
+			userDB = adminUserService.findById(user.getId()); 
+			userDB.setName(user.getName());
+			userDB.setEmail(user.getEmail());
+			userDB.setActive(user.isActive());
+		} else {
+			userDB = user;
+		}		
+		return adminUserService.save(userDB);
 	}
 	
 	@PostMapping(path = {"delete"})
