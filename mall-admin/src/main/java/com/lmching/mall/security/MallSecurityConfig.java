@@ -22,7 +22,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.thymeleaf.extras.springsecurity4.dialect.SpringSecurityDialect;
@@ -69,6 +68,11 @@ public class MallSecurityConfig extends WebSecurityConfigurerAdapter {
     	}
     }
     
+    @Bean
+    public MyAuthenticationSuccessHandler myAuthenticationSuccessHandler(){
+    	return new MyAuthenticationSuccessHandler("/index");
+    }
+    
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.formLogin()
@@ -76,7 +80,7 @@ public class MallSecurityConfig extends WebSecurityConfigurerAdapter {
 		.loginProcessingUrl("/doLogin")
 		.usernameParameter("email")
 		.passwordParameter("password")
-		.successHandler(new MyAuthenticationSuccessHandler("/index"))
+		.successHandler(myAuthenticationSuccessHandler())
 		.failureHandler(new SimpleUrlAuthenticationFailureHandler("/signin"))
 		.and()
 		.authorizeRequests()
@@ -84,6 +88,8 @@ public class MallSecurityConfig extends WebSecurityConfigurerAdapter {
 					.permitAll()
 				.antMatchers("/adminuser/**", "/user")
 					.hasAnyAuthority("ADMIN")
+				.antMatchers("/adminuser/changePassword")
+					.hasAnyAuthority("USER")
 				.anyRequest()
 				.authenticated()
 				.and()
@@ -91,10 +97,14 @@ public class MallSecurityConfig extends WebSecurityConfigurerAdapter {
 				.and().and()
 				.csrf().disable();
 		http.logout()
+			.deleteCookies("JSESSIONID")
 			.logoutUrl("/logout")
 			.logoutSuccessUrl("/login")
 			.and().csrf().disable();
-		
+		http.rememberMe()
+			.key("uniqueAndSecret")
+			.authenticationSuccessHandler(myAuthenticationSuccessHandler())
+			.rememberMeParameter("remember-me");
 	}
 	
 	public void configure(WebSecurity web) throws Exception {
