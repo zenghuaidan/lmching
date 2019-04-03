@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-<div th:replace="~{share :: head('Manage Admin User')}"></div>
+<div th:replace="~{share :: head('Manage User')}"></div>
 <body>
     <div id="wrapper">
         <div th:replace="~{share :: menubar}"></div>
@@ -9,7 +9,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="page-header">
-                        <h1>Manage Admin User <small></small></h1>
+                        <h1>Manage User <small></small></h1>
                     </div>
 <!--                     <div class="alert alert-success alert-dismissable">
                         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
@@ -33,6 +33,15 @@
 	    .invalid-border {
 	         border: 1px solid red;
 	    }
+	    
+        .toolbar {
+	        float: right;
+	        padding-right: 10px;
+	        padding-top: 10px;
+	    }
+	    .sui-grid .sui-toolbar {
+	        height: 62px;
+	    }
 	</style>
     <!-- https://fontawesome.com/icons/user?style=solid -->
     <script id="activeStatusTemplate" type="text/x-shield-template">
@@ -41,88 +50,30 @@
     <script id="inactiveStatusTemplate" type="text/x-shield-template">
 		<img th:src="@{/images/icon-inactive.png}">
 	</script>
+	<script type="text/x-shield-template" id="toolbar">
+		<div class="toolbar">
+    		<label class="genderLabel" for="gender">Filter by Gender:</label>
+    		<select id="gender" style="width: 150px">
+        		<option value="">Choose value</option>
+        		<option value="male">Male</option>
+        		<option value="female">Female</option>
+    		</select>
+		</div>
+	</script>
     
     <script type="text/javascript">
-    	var editId = -1;
-		var listUrl = "[[@{/adminuser/list}]]";
-		var createUrl = "[[@{/adminuser/create}]]";
-		var updateUrl = "[[@{/adminuser/update}]]";
-		var deleteUrl = "[[@{/adminuser/delete}]]";		
-		var findByEmailUrl = "[[@{/adminuser/findByEmail}]]";
-		var initPasswordUrl = "[[@{/adminuser/initPassword}]]";
-	    function nameValidator(value) {
-	        if (value == "") {
-	            return undefined;
-	        }
-	        else {
-	            return value;
-	        }
-	    }
-	    function emailValidator(value) {
-	    	var reg = new RegExp("^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$");
-	        if (value == "" || !reg.test(value)) {
-	            return undefined;
-	        }
-	        else {
-	        	var exist = true;
-	        	$.post({
-	        		url: findByEmailUrl,
-	        		async:false,
-	        		data: {"email" : value},
-	        		success: function(data) {
-	        			exist = data != "" && data.id != editId;
-	        		},
-	        		error: function() {
-	        			exist = true;
-	        		}
-	        	});	        		        	
-	            return exist ? undefined : value;
-	        }
-	    }
+		var listUrl = "[[@{/user/list}]]";				
         jQuery(function ($) {
             $("#grid").shieldGrid({
                 dataSource: {
                     remote: {
                         read: listUrl,
-                        modify: {
-                            create: {
-                                url: createUrl,
-                                type: "post",
-                                data: function (edited) {
-                                    return {
-                                        name: $.trim(edited[0].data.name),
-                                        email: $.trim(edited[0].data.email),
-                                        active: edited[0].data.active,
-                                        id: edited[0].data.id
-                                    };
-                                }
-                            },
-                            update: {
-                                url: updateUrl,
-                                type: "post",
-                                data: function (edited) {
-                                    return {
-                                        name: $.trim(edited[0].data.name),
-                                        email: $.trim(edited[0].data.email),
-                                        active: edited[0].data.active,
-                                        id: edited[0].data.id
-                                    };
-                                }
-                            },
-                            remove: {
-                                url: deleteUrl,
-                                type: "post",
-                                data: function (removed) {
-                                    return { id: removed[0].data.id };
-                                }
-                            }
-                        }
                     },
                     schema: {
                         fields: {
                             id: { path: "id", type: Number },
-                            name: { path: "name", type: String, validator: nameValidator },
-                            email: { path: "email", type: String, validator: emailValidator },
+                            name: { path: "name", type: String },
+                            email: { path: "email", type: String },
                             active: { path: "active", type: Boolean }
                         }
                     }
@@ -162,56 +113,31 @@
                         ]
                     }
                 ],
-                editing: {
-                    enabled: true,
-                    //event: "doubleclick",//doubleclick,click
-                    type: "row",
-                    confirmation: {
-                        "delete": {
-                            enabled: true,
-                            template: function (item) {
-                                return "Delete user with name '" + item.name + "'?";
-                            }
-                        },
-                        "save": {
-                            enabled: true,
-                            template: function (item) {
-                                return "Delete user with name '" + item.name + "'?";
-                            }
-                        }
-                    }
-                },
-                events:
-                {
-                    error: function (e) {
-                        switch (e.path) {
-                            case "name":
-                                e.editor.element.addClass("invalid-back invalid-border");
-                                break;
-                            case "email":
-                            	e.editor.element.addClass("invalid-back invalid-border");
-                                break;
-                            default:
-                                break;
-                        }
-                    },
-                	command: function (e) {
-                		editId = -1;
-	                    if (e.commandName == "edit") {
-	                    	editId = e.target.dataSource.data[e.index].id;
-	                    }	                    
-                    }
-                },
                 toolbar: [
                     {
-                        buttons: [
-                            { commandName: "insert", caption: "Add User" }
-                        ],
+                        template: $("#toolbar").html(),
                         position: "top"
                     }
                 ]
             });
         	
+            $("#gender").shieldDropDown({
+                events:
+                    {
+                        select: function (e) {
+                            var dataSource = $("#grid").swidget().dataSource,
+                                value = e.item.value;
+                            if (value) {
+                                dataSource.filter = { path: "gender", filter: "eq", value: value };
+                            }
+                            else {
+                                dataSource.filter = null;
+                            }
+                            dataSource.read();
+                        }
+                    }
+            });
+            
         });
     </script>
 </body>

@@ -62,6 +62,7 @@ public class MallSecurityConfig extends WebSecurityConfigurerAdapter {
     	public void onAuthenticationSuccess(HttpServletRequest request,
     			HttpServletResponse response, Authentication authentication)
     			throws IOException, ServletException {
+//    		RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
     		AdminUser user = adminUserService.findByEmail(((org.springframework.security.core.userdetails.User)authentication.getPrincipal()).getUsername());
     		request.getSession().setAttribute("user", user);
     		super.onAuthenticationSuccess(request, response, authentication);
@@ -86,7 +87,7 @@ public class MallSecurityConfig extends WebSecurityConfigurerAdapter {
 		.authorizeRequests()
 				.antMatchers("/login", "/doLogin")
 					.permitAll()
-				.antMatchers("/adminuser/**", "/user")
+				.antMatchers("/adminuser/**", "/adminuser")
 					.hasAnyAuthority("ADMIN")
 				.antMatchers("/adminuser/changePassword")
 					.hasAnyAuthority("USER")
@@ -102,7 +103,7 @@ public class MallSecurityConfig extends WebSecurityConfigurerAdapter {
 			.logoutSuccessUrl("/login")
 			.and().csrf().disable();
 		http.rememberMe()
-			.key("uniqueAndSecret")
+			.key("CN8e6jbIvd2WOwD0N8/dxqVv1bK6IPc6i8sN2p7x")
 			.authenticationSuccessHandler(myAuthenticationSuccessHandler())
 			.rememberMeParameter("remember-me");
 	}

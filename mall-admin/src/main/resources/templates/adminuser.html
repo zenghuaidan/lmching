@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<div th:replace="~{share :: head('Manage Admin User')}"></div>
+<body>
+    <div id="wrapper">
+        <div th:replace="~{share :: menubar}"></div>
+
+        <div id="page-wrapper">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="page-header">
+                        <h1>Manage Admin User <small></small></h1>
+                    </div>
+<!--                     <div class="alert alert-success alert-dismissable">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        This theme page uses the Grid widget, part of the <a href="https://www.shieldui.com" target="_blank">Shield UI</a> JavaScript library.
+                    </div> -->
+                    <div id="grid"></div>
+                </div>
+            </div>
+            <!-- /.row -->
+        </div>
+        <!-- /#page-wrapper -->
+    </div>
+    <!-- /#wrapper -->
+    <style type="text/css">
+	    .sui-button-cell {
+	        text-align: center;
+	    }
+	    div .sui-table td .invalid-back {
+	        background-color: #ffe0e1;
+	    }
+	    .invalid-border {
+	         border: 1px solid red;
+	    }
+	</style>
+    <!-- https://fontawesome.com/icons/user?style=solid -->
+    <script id="activeStatusTemplate" type="text/x-shield-template">
+		<img th:src="@{/images/icon-active.png}">
+	</script>
+    <script id="inactiveStatusTemplate" type="text/x-shield-template">
+		<img th:src="@{/images/icon-inactive.png}">
+	</script>
+    
+    <script type="text/javascript">
+    	var editId = -1;
+		var listUrl = "[[@{/adminuser/list}]]";
+		var createUrl = "[[@{/adminuser/create}]]";
+		var updateUrl = "[[@{/adminuser/update}]]";
+		var deleteUrl = "[[@{/adminuser/delete}]]";		
+		var findByEmailUrl = "[[@{/adminuser/findByEmail}]]";
+		var initPasswordUrl = "[[@{/adminuser/initPassword}]]";
+	    function nameValidator(value) {
+	        if (value == "") {
+	            return undefined;
+	        }
+	        else {
+	            return value;
+	        }
+	    }
+	    function emailValidator(email) {	    	
+	        if (valid(email)) {
+	            return undefined;
+	        }
+	        else {
+	        	var exist = true;
+	        	$.post({
+	        		url: findByEmailUrl,
+	        		async:false,
+	        		data: {"email" : email},
+	        		success: function(data) {
+	        			exist = data != "" && data.id != editId;
+	        		},
+	        		error: function() {
+	        			exist = true;
+	        		}
+	        	});	        		        	
+	            return exist ? undefined : email;
+	        }
+	    }
+        jQuery(function ($) {
+            $("#grid").shieldGrid({
+                dataSource: {
+                    remote: {
+                        read: listUrl,
+                        modify: {
+                            create: {
+                                url: createUrl,
+                                type: "post",
+                                data: function (edited) {
+                                    return {
+                                        name: $.trim(edited[0].data.name),
+                                        email: $.trim(edited[0].data.email),
+                                        active: edited[0].data.active,
+                                        id: edited[0].data.id
+                                    };
+                                }
+                            },
+                            update: {
+                                url: updateUrl,
+                                type: "post",
+                                data: function (edited) {
+                                    return {
+                                        name: $.trim(edited[0].data.name),
+                                        email: $.trim(edited[0].data.email),
+                                        active: edited[0].data.active,
+                                        id: edited[0].data.id
+                                    };
+                                }
+                            },
+                            remove: {
+                                url: deleteUrl,
+                                type: "post",
+                                data: function (removed) {
+                                    return { id: removed[0].data.id };
+                                }
+                            }
+                        }
+                    },
+                    schema: {
+                        fields: {
+                            id: { path: "id", type: Number },
+                            name: { path: "name", type: String, validator: nameValidator },
+                            email: { path: "email", type: String, validator: emailValidator },
+                            active: { path: "active", type: Boolean }
+                        }
+                    }
+                },
+                sorting:{
+                    multiple: false
+                },
+                paging: {
+                    pageSize: 5
+                },
+                rowHover: true,
+                columns: [
+                    { field: "name", title: "Name"},
+                    { field: "email", title: "email" },
+                    { field: "active", title: "Active", columnTemplate: function(cell, item) { if(item['active']) $($("#activeStatusTemplate").html()).appendTo(cell); else $($("#inactiveStatusTemplate").html()).appendTo(cell); } },
+                    {
+                        width: 250,
+                        title: " ",
+                        buttons: [
+                        	{ commandName: "edit", caption: "Edit" },
+                            /* { commandName: "delete", caption: "Delete" }, */
+	    		            {
+	    		                caption: "Init Password",
+	    		                commandName: "initPassword",
+	    		                click: function (rowIndex) {
+	    		                    var item = $("#grid").swidget().dataItem(rowIndex);
+	    		    	        	$.post({
+	    		    	        		url: initPasswordUrl,
+	    		    	        		data: {"id" : item.id},
+	    		    	        		success: function(data) {
+	    		    	        			if(data) alert("email sent");
+	    		    	        		}
+	    		    	        	});	
+	    		                    
+	    		                }
+	    		            }
+                        ]
+                    }
+                ],
+                editing: {
+                    enabled: true,
+                    //event: "doubleclick",//doubleclick,click
+                    type: "row",
+                    confirmation: {
+                        "delete": {
+                            enabled: true,
+                            template: function (item) {
+                                return "Delete user with name '" + item.name + "'?";
+                            }
+                        }
+                    }
+                },
+                events:
+                {
+                    error: function (e) {
+                        switch (e.path) {
+                            case "name":
+                                e.editor.element.addClass("invalid-back invalid-border");
+                                break;
+                            case "email":
+                            	e.editor.element.addClass("invalid-back invalid-border");
+                                break;
+                            default:
+                                break;
+                        }
+                    },
+                	command: function (e) {
+                		editId = -1;
+	                    if (e.commandName == "edit") {
+	                    	editId = e.target.dataSource.data[e.index].id;
+	                    }	                    
+                    }
+                },
+                toolbar: [
+                    {
+                        buttons: [
+                            { commandName: "insert", caption: "Add User" }
+                        ],
+                        position: "top"
+                    }
+                ]
+            });
+        	
+        });
+    </script>
+</body>
+</html>

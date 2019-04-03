@@ -43,7 +43,7 @@ public class AdminUserController {
 	@PostMapping(path = {"delete"})
 	@ResponseBody
 	public void delete(Long id) {	
-		adminUserService.deleteById(id);
+		//adminUserService.deleteById(id);
 	}
 	
 	@PostMapping(path = {"findByEmail"})

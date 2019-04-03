@@ -16,6 +16,7 @@ public class MallMvcConfiguration extends WebMvcConfigurerAdapter {
 		registry.addViewController("/grid").setViewName("grid");
 		registry.addViewController("/boot").setViewName("boot");
 		registry.addViewController("/user").setViewName("user");
+		registry.addViewController("/adminuser").setViewName("adminuser");
 	}
 	
 	@Override

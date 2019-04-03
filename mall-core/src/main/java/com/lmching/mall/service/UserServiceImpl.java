@@ -9,6 +9,9 @@ import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.ResourceBundleMessageSource;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.domain.Sort.Order;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
@@ -133,6 +136,11 @@ public class UserServiceImpl implements UserService{
 			return true;
 		}
 		return false;
+	}
+	
+	@Override
+	public Iterable<User> findAll() {
+		return userRepository.findAll(new Sort(new Order(Direction.ASC, "id")));
 	}
 	
 }

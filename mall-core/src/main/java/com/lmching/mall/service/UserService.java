@@ -36,5 +36,7 @@ public interface UserService {
 	public boolean updatePasswordByResetPasswordCode(String password, String resetPasswordCode);
 
 	public boolean forgetPassword(String email, HttpServletRequest request, SessionLocaleResolver localeResolver, ResourceBundleMessageSource messageSource);
+	
+	public Iterable<User> findAll();
     
 }
