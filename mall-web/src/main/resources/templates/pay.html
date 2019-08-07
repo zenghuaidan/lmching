@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+<style rel="stylesheet" type="text/css">
+
+.button {
+  background-position: top left;
+  background-repeat: no-repeat;
+  background-color: #ffffff;
+  width: auto;
+  border: 0px;
+  margin: 7px 0 5px 7px;
+  padding: 3px 0 6px 0;
+  cursor: hand;
+  cursor: pointer;
+  color: blue;
+  font-family: Tahoma;
+  font-size: 60px;
+  border: 1px solid;
+}
+
+
+
+</style>
+</head>
+<body>
+<form method="POST" action="https://payment.pa-sys.com/app/page/bca03f56-a9c9-4b45-9061-47c89e88ef6f" name="payment" accept-charset="utf-8">
+<input type="hidden" name="amount" value="1.00" />
+<input type="hidden" name="currency" value="HKD" />
+<input type="hidden" name="customer_address" value="address" />
+<input type="hidden" name="customer_country" value="US"/>
+<input type="hidden" name="customer_email" value="someone@gmail.com" />
+<input type="hidden" name="customer_ip" value="123.123.123.123" />
+<input type="hidden" name="customer_first_name" value="John" />
+ <input type="hidden" name="customer_last_name" value="Doe" />
+<input type="hidden" name="customer_phone" value="0123123123" />
+<input type="hidden" name="customer_state" value="NY" />
+<input type="hidden" name="merchant_reference" value="3" />
+<input type="hidden" name="return_url" value="https://demo.shop.com/payment/return" />
+<input type="hidden" name="network" value="Alipay" />
+<input type="hidden" name="subject" value="IphoneX" />
+<input type="hidden" name="sign" value="d1165fd802dff0ef2d6cf7e8d149c113f00408510477f784dc65062645e1c751ed4e33e3f3b9efd51d0cffdd69ffee34821012ca1b15ab64a3d937f8cfa99bbf" />
+<input type="submit" value="Alipay" class="button">
+</form>
+
+<form method="POST" action="https://payment.pa-sys.com/app/page/bca03f56-a9c9-4b45-9061-47c89e88ef6f" name="payment" accept-charset="utf-8">
+<input type="hidden" name="amount" value="1.00" />
+<input type="hidden" name="currency" value="HKD" />
+<input type="hidden" name="customer_address" value="address" />
+<input type="hidden" name="customer_country" value="US"/>
+<input type="hidden" name="customer_email" value="someone@gmail.com" />
+<input type="hidden" name="customer_ip" value="123.123.123.123" />
+<input type="hidden" name="customer_first_name" value="John" />
+ <input type="hidden" name="customer_last_name" value="Doe" />
+<input type="hidden" name="customer_phone" value="0123123123" />
+<input type="hidden" name="customer_state" value="NY" />
+<input type="hidden" name="merchant_reference" value="3" />
+<input type="hidden" name="return_url" value="https://demo.shop.com/payment/return" />
+<input type="hidden" name="network" value="Wechat" />
+<input type="hidden" name="subject" value="IphoneX" />
+<input type="hidden" name="sign" value="d1165fd802dff0ef2d6cf7e8d149c113f00408510477f784dc65062645e1c751ed4e33e3f3b9efd51d0cffdd69ffee34821012ca1b15ab64a3d937f8cfa99bbf" />
+<input type="submit" value="Wechat Pay" class="button">
+</form>
+</body>
+</html>
