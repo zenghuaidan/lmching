@@ -74,6 +74,8 @@
            	
            	<li sec:authorize="hasAuthority('USER')"><a th:href="@{/user}"><i class="fa fa-user"></i> User</a></li>
            	
+           	<li><a th:href="@{/enquiry}"><i class="fa fa-envelope"></i> Message</a></li>
+           	
             <li class="nav nav-list nav-list-expandable nav-list-expanded">
                 <a><i class="fa fa-user"></i> More Widgets <span class="caret"></span></a>
                 <ul class="nav navbar-nav">
@@ -83,7 +85,7 @@
             </li>            
             <li><a th:href="@{/boot}"><i class="fa fa-magic"></i> Bootstrap Elements</a></li>
             <li class="nav nav-list nav-list-expandable">
-                <a><i class="fa fa-key"></i> Collapsed Menu Item <span class="caret"></span></a>
+                <a><i class="fa fa-buffer"></i> Collapsed Menu Item <span class="caret"></span></a>
                 <ul class="nav navbar-nav">
                     <li><a href="#">Sub Item 1</a></li>
                     <li><a href="#">Sub Item 2</a></li>

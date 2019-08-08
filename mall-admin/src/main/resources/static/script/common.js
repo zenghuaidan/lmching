@@ -13,5 +13,5 @@ function dialog(title, message) {
 
 function valid(email) {
 	var reg = new RegExp("^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$");
-    return value != "" && reg.test(value);
+    return email != "" && reg.test(email);
 }

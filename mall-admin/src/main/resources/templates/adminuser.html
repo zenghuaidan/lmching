@@ -59,7 +59,7 @@
 	        }
 	    }
 	    function emailValidator(email) {	    	
-	        if (valid(email)) {
+	        if (!valid(email)) {
 	            return undefined;
 	        }
 	        else {
@@ -130,7 +130,7 @@
                     multiple: false
                 },
                 paging: {
-                    pageSize: 5
+                    pageSize: 12
                 },
                 rowHover: true,
                 columns: [
