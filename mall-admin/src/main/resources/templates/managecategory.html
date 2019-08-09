@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<div th:replace="~{share :: head('Manage Admin User')}"></div>
+<body>
+    <div id="wrapper">
+        <div th:replace="~{share :: menubar}"></div>
+
+        <div id="page-wrapper">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="page-header">
+                        <h1>[[${#strings.equals(param.type, 'Brand') ? 'Manage Brand' : 'Manage Type'}]] <small></small></h1>
+                    </div>
+<!--                     <div class="alert alert-success alert-dismissable">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        This theme page uses the Grid widget, part of the <a href="https://www.shieldui.com" target="_blank">Shield UI</a> JavaScript library.
+                    </div> -->
+                    <div id="grid"></div>
+                </div>
+            </div>
+            <!-- /.row -->
+        </div>
+        <!-- /#page-wrapper -->
+    </div>
+    <!-- /#wrapper -->
+    <style type="text/css">
+	    .sui-button-cell {
+	        text-align: center;
+	    }
+	    div .sui-table td .invalid-back {
+	        background-color: #ffe0e1;
+	    }
+	    .invalid-border {
+	         border: 1px solid red;
+	    }
+	</style>    
+    
+    <script type="text/javascript">
+    	var editId = -1;
+		var listUrl = "[[${#strings.equals(param.type, 'Brand')} ? @{/category/listBrands} : @{/category/listTypes}]]";
+		var createUrl = "[[@{/category/create}]]";
+		var updateUrl = "[[@{/category/update}]]";
+		var deleteUrl = "[[@{/category/delete}]]";		
+	    function nameValidator(value) {
+	        if (value == "") {
+	            return undefined;
+	        }
+	        else {
+	            return value;
+	        }
+	    }
+        jQuery(function ($) {
+            $("#grid").shieldGrid({
+                dataSource: {
+                    remote: {
+                        read: listUrl,
+                        modify: {
+                            create: {
+                                url: createUrl,
+                                type: "post",
+                                data: function (edited) {
+                                    return {
+                                    	nameEN: $.trim(edited[0].data.nameEN),
+                                    	nameTC: $.trim(edited[0].data.nameTC),
+                                        id: edited[0].data.id,
+                                        pid: 0,
+                                        type: '[[${param.type}]]'
+                                    };
+                                }
+                            },
+                            update: {
+                                url: updateUrl,
+                                type: "post",
+                                data: function (edited) {
+                                    return {
+                                    	nameEN: $.trim(edited[0].data.nameEN),
+                                    	nameTC: $.trim(edited[0].data.nameTC),
+                                        id: edited[0].data.id
+                                    };
+                                }
+                            },
+                            remove: {
+                                url: deleteUrl,
+                                type: "post",
+                                data: function (removed) {
+                                    return { id: removed[0].data.id };
+                                }
+                            }
+                        }
+                    },
+                    schema: {
+                        fields: {
+                            id: { path: "id", type: Number },
+                            nameEN: { path: "nameEN", type: String, validator: nameValidator },
+                            nameTC: { path: "nameTC", type: String, validator: nameValidator },
+                        }
+                    }
+                },
+                sorting:{
+                    multiple: false
+                },
+                paging: {
+                    pageSize: 12
+                },
+                rowHover: true,
+                columns: [
+                    { field: "nameEN", title: "Name in English"},
+                    { field: "nameTC", title: "Name in Chinese" },                    
+                    {
+                        width: 250,
+                        title: " ",
+                        buttons: [
+                        	{ commandName: "edit", caption: "Edit" },
+                            { commandName: "delete", caption: "Delete" }
+                        ]
+                    }
+                ],
+                editing: {
+                    enabled: true,
+                    //event: "doubleclick",//doubleclick,click
+                    type: "row",
+                    confirmation: {
+                        "delete": {
+                            enabled: true,
+                            template: function (item) {
+                                return "Delete item with name '" + item.nameEN + "'?";
+                            }
+                        }
+                    }
+                },    
+                events:
+                {
+                    error: function (e) {
+                        switch (e.path) {
+                            case "nameEN":
+                                e.editor.element.addClass("invalid-back invalid-border");
+                                break;
+                            case "nameTC":
+                                e.editor.element.addClass("invalid-back invalid-border");
+                                break;
+                            default:
+                                break;
+                        }
+                    },
+	            	command: function (e) {
+	            		console.log(e.commandName);
+	                    if (e.commandName == "save") {
+	                    	$("#grid").swidget().refresh();
+	                    }	                    
+	                }
+                },
+                toolbar: [
+                    {
+                        buttons: [
+                            { commandName: "insert", caption: "Add Item" }
+                        ],
+                        position: "top"
+                    }
+                ]
+            });
+        	
+        });
+    </script>
+</body>
+</html>

@@ -5,10 +5,13 @@ import java.util.Locale;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Table;
 
+import com.lmching.mall.model.assist.CategoryType;
 import com.lmching.mall.model.assist.Pojo;
 
 @Table(name = "mall_category")
@@ -20,15 +23,13 @@ public class Category extends Pojo {
 
 	private Long pid;
 	
-	private String type;
+	private CategoryType type;
 	
 	private String nameEN;	
 	
 	private String nameTC;
 		
 	private Integer corder;
-	
-	private boolean active = true;
 		
 	@Column(nullable=false)
 	public Long getPid() {
@@ -40,11 +41,12 @@ public class Category extends Pojo {
 	}
 
 	@Column(nullable=false)
-	public String getType() {
+	@Enumerated(EnumType.STRING)
+	public CategoryType getType() {
 		return type;
 	}
 
-	public void setType(String type) {
+	public void setType(CategoryType type) {
 		this.type = type;
 	}
 
@@ -71,15 +73,6 @@ public class Category extends Pojo {
 
 	public void setCorder(Integer corder) {
 		this.corder = corder;
-	}
-
-	@Column(nullable=false)
-	public boolean isActive() {
-		return active;
-	}
-
-	public void setActive(boolean active) {
-		this.active = active;
 	}
 
 	public String getName(Locale locale) {

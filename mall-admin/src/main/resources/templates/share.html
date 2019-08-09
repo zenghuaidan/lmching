@@ -76,19 +76,19 @@
            	
            	<li><a th:href="@{/enquiry}"><i class="fa fa-envelope"></i> Message</a></li>
            	
-            <li class="nav nav-list nav-list-expandable nav-list-expanded">
+            <!--li class="nav nav-list nav-list-expandable nav-list-expanded">
                 <a><i class="fa fa-user"></i> More Widgets <span class="caret"></span></a>
                 <ul class="nav navbar-nav">
                     <li><a th:href="@{/grid}"><i class="fa fa-table"></i> Data Grid</a></li>
                     <li><a th:href="@{/editor}"><i class="fa fa-edit"></i> Editor</a></li>
                 </ul>
-            </li>            
-            <li><a th:href="@{/boot}"><i class="fa fa-magic"></i> Bootstrap Elements</a></li>
+            </li-->            
+            <li><a th:href="@{/category/managecategory(type=Brand)}"><i class="fa fa-magic"></i> Main Brands</a></li>
             <li class="nav nav-list nav-list-expandable">
-                <a><i class="fa fa-buffer"></i> Collapsed Menu Item <span class="caret"></span></a>
+                <a><i class="fa fa-bars"></i> Manage Types <span class="caret"></span></a>
                 <ul class="nav navbar-nav">
-                    <li><a href="#">Sub Item 1</a></li>
-                    <li><a href="#">Sub Item 2</a></li>
+                    <li><a th:href="@{/category/managecategory(type=Type)}">Main Type</a></li>
+                    <li><a th:href="@{/category/managesubcategory(type=Type)}">Sub Type</a></li>
                 </ul>
             <li>
         </ul>
