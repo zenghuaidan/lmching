@@ -43,7 +43,7 @@
 	    }
 	</style>    
 	<script type="text/x-shield-template" id="toolbar">
-		<button th:if="${#lists.size(mainCategories)} &gt; 0" id="addBtn" type="button" class="sui-button" role="button">Add Item</button>
+		
 		<div class="toolbar">
     		<label class="genderLabel" for="gender">Filter by Main Type:</label>
     		<select id="mainCategory" style="width: 150px">
@@ -67,11 +67,30 @@
 	            return value;
 	        }
 	    }
+	    var init = false;
         jQuery(function ($) {
             $("#grid").shieldGrid({
                 dataSource: {
                     remote: {
-                        read: listUrl,
+                        read: function (params, success, error) {
+                            $.ajax({
+                                url: listUrl,                                
+                                success: success,
+                                error: error
+                            }).then(function success() {
+                            	if(!init) {
+									init = true;                            		
+	                           		$("#grid").swidget().filter({
+	                            		or: [
+	                            			{ path: "pid", filter: "eq", value: $("#mainCategory").swidget().value() },
+	                            			{ path: "pid", filter: "isnull" }
+	                            		]
+	                                });
+                            	}
+                            }, function error() {
+								
+							});
+                        },
                         modify: {
                             create: {
                                 url: createUrl,
@@ -80,10 +99,12 @@
                                     return {
                                     	nameEN: $.trim(edited[0].data.nameEN),
                                     	nameTC: $.trim(edited[0].data.nameTC),
-                                        id: edited[0].data.id,
                                         pid: $("#mainCategory").val(),
                                         type: '[[${param.type}]]'
                                     };
+                                },
+                                success: function() {                                	                                	
+                                	$("#grid").swidget().dataSource.read();
                                 }
                             },
                             update: {
@@ -160,29 +181,25 @@
                             default:
                                 break;
                         }
-                    }
+                    },
+	            	command: function (e) {     
+	            		console.log(e)
+	                }
                 },
                 toolbar: [
                     {
-                        //buttons: [
-                        //    { commandName: "insert", caption: "Add Item" }
-                        //],
+                        buttons: [
+                            { commandName: "insert", caption: "Add Item" }
+                        ],
+                        position: "top"
+                    },
+                    {
                         template: $("#toolbar").html(),
                         position: "top"
                     }
                 ]
             });
         	
-	        $("#addBtn").shieldButton({
-	            events:
-		            {
-		                click: function (e) {
-		                	$("#grid").swidget().insertRow({}, 0);
-		                	$("#grid").swidget().editRow(0);
-		                	$("#grid").swidget().saveChanges();
-		                }
-		            }
-	        });
 	        $("#mainCategory").shieldDropDown({
 	            events:
 	                {
@@ -190,7 +207,12 @@
 	                        var dataSource = $("#grid").swidget().dataSource,
 	                            value = e.item.value;
 	                        if (value) {
-	                            dataSource.filter = { path: "pid", filter: "eq", value: value };
+	                            dataSource.filter = {
+                            		or: [
+                            			{ path: "pid", filter: "eq", value: value },
+                            			{ path: "pid", filter: "isnull" }
+                            		]
+	                            }
 	                        }
 	                        else {
 	                            dataSource.filter = null;
@@ -199,6 +221,8 @@
 	                    }
 	                }
 	        });
+	        
+
         });        
     </script>
 </body>

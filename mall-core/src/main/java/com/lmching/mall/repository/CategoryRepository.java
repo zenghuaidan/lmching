@@ -11,10 +11,10 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
 	
 	Iterable<Category> findByType(CategoryType type);
 	
-	@Query(value = "select c from Category c where c.pid = 0 and type = ?1")
+	@Query(value = "select c from Category c where c.pid = 0 and type = ?1 order by id desc")
 	Iterable<Category> findMainCategoryByType(CategoryType type);
 	
-    @Query(value = "select c from Category c where c.pid <> 0 and type = ?1")
+    @Query(value = "select c from Category c where c.pid <> 0 and type = ?1 order by id desc")
 	Iterable<Category> findSubCategoryByType(CategoryType type);
 
     @Modifying

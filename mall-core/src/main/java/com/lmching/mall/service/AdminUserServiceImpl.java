@@ -95,7 +95,7 @@ public class AdminUserServiceImpl implements AdminUserService {
 
 	@Override
 	public Iterable<AdminUser> findAll() {
-		return adminUserRepository.findAll(new Sort(new Order(Direction.ASC, "id")));
+		return adminUserRepository.findAll(new Sort(new Order(Direction.DESC, "id")));
 	}
 
 	@Override

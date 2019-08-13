@@ -94,6 +94,9 @@
                                         active: edited[0].data.active,
                                         id: edited[0].data.id
                                     };
+                                },
+                                success: function() {                                	                                	
+                                	$("#grid").swidget().dataSource.read();
                                 }
                             },
                             update: {
