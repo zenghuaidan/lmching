@@ -184,7 +184,9 @@
                         }
                     },
 	            	command: function (e) {     
-	            		console.log(e)
+	                    if (e.commandName == "insert" && $("#mainCategory").val() == null) {	                    	
+	                        e.cancel = true;	                    	
+	                    }
 	                }
                 },
                 toolbar: [
