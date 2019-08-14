@@ -40,7 +40,8 @@
 		var listUrl = "[[${#strings.equals(param.type, 'Brand')} ? @{/category/listBrands} : @{/category/listTypes}]]";
 		var createUrl = "[[@{/category/create}]]";
 		var updateUrl = "[[@{/category/update}]]";
-		var deleteUrl = "[[@{/category/delete}]]";		
+		var deleteUrl = "[[@{/category/delete}]]";	
+		var editing = false;
 	    function nameValidator(value) {
 	        if (value == "") {
 	            return undefined;
@@ -120,7 +121,7 @@
                 editing: {
                     enabled: true,
                     //event: "doubleclick",//doubleclick,click
-                    //mode: "popup",
+                    mode: "popup",
                     type: "row",
                     confirmation: {
                         "delete": {
@@ -145,7 +146,18 @@
                                 break;
                         }
                     },
-	            	command: function (e) {                 
+	            	command: function (e) { 
+	            		// if use popup mode, then no need below logic
+/* 	                    if (e.commandName == "insert") {
+	                    	if(editing) {	                    		
+		                        e.cancel = true;
+	                    	} else {
+	                    		editing = true;
+	                    	}
+	                    }
+	                    if (e.commandName == "save" || e.commandName == "cancel" || e.commandName == "edit") {
+	                    	editing = false;
+	                    }	 */                  
 	                }
                 },
                 toolbar: [
